@@ -1,30 +1,31 @@
 import { ApifyClient } from 'apify-client';
+import { NextRequest, NextResponse } from 'next/server';
 
 const client = new ApifyClient({ token: process.env.APIFY_TOKEN });
 
-export default async function handler(req, res) {
-  // CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
-
-  const { location, industry, filter = 'nowebsite' } = req.query;
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const location = searchParams.get('location');
+  const industry = searchParams.get('industry');
+  const filter = searchParams.get('filter') || 'nowebsite';
 
   if (!location || !industry) {
-    return res.status(400).json({ error: 'location and industry are required' });
+    return NextResponse.json(
+      { error: 'location and industry are required' },
+      { status: 400 }
+    );
   }
 
   if (!process.env.APIFY_TOKEN) {
-    return res.status(500).json({ error: 'APIFY_TOKEN is not configured' });
+    return NextResponse.json(
+      { error: 'APIFY_TOKEN is not configured' },
+      { status: 500 }
+    );
   }
 
   try {
     console.log(`Scraping: "${industry} in ${location}" — filter: ${filter}`);
 
-    // Run the Google Maps scraper
     const run = await client.actor('compass/crawler-google-places').call({
       searchStringsArray: [`${industry} in ${location}`],
       maxCrawledPlacesPerSearch: 60,
@@ -35,22 +36,19 @@ export default async function handler(req, res) {
       includePeopleAlsoSearch: false,
     });
 
-    // Fetch results from dataset
     const { items } = await client.dataset(run.defaultDatasetId).listItems();
 
-    // Apply filter
     let leads = items;
 
     if (filter === 'nowebsite') {
-      leads = items.filter(b => !b.website || b.website.trim() === '');
+      leads = items.filter((b: any) => !b.website || b.website.trim() === '');
     } else if (filter === 'noreviews') {
-      leads = items.filter(b => !b.reviewsCount || b.reviewsCount === 0);
+      leads = items.filter((b: any) => !b.reviewsCount || b.reviewsCount === 0);
     } else if (filter === 'lowrating') {
-      leads = items.filter(b => b.totalScore && b.totalScore < 3.5);
+      leads = items.filter((b: any) => b.totalScore && b.totalScore < 3.5);
     }
 
-    // Shape the response
-    const shaped = leads.map(b => ({
+    const shaped = leads.map((b: any) => ({
       name: b.title || 'Unknown',
       address: b.address || b.street || '',
       city: b.city || '',
@@ -63,7 +61,7 @@ export default async function handler(req, res) {
       placeId: b.placeId || null,
     }));
 
-    return res.status(200).json({
+    return NextResponse.json({
       leads: shaped,
       total: shaped.length,
       scraped: items.length,
@@ -72,8 +70,22 @@ export default async function handler(req, res) {
       industry,
     });
 
-  } catch (err) {
+  } catch (err: any) {
     console.error('Apify error:', err.message);
-    return res.status(500).json({ error: 'Scraping failed. Check your Apify token and try again.', detail: err.message });
+    return NextResponse.json(
+      { error: 'Scraping failed. Check your Apify token and try again.', detail: err.message },
+      { status: 500 }
+    );
   }
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  });
 }
