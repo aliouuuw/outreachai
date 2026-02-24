@@ -1,8 +1,27 @@
 import type { Metadata } from "next";
+import { Inter, Syne } from "next/font/google";
+import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["300", "400", "500", "600"],
+});
+
+const syne = Syne({
+  subsets: ["latin"],
+  variable: "--font-syne",
+  weight: ["700", "800"],
+});
 
 export const metadata: Metadata = {
   title: "OutreachAI — Outreach That Converts",
-  description: "OutreachAI — Lead finder and outreach generator",
+  description: "OutreachAI writes hyper-personalized cold emails, DMs, and follow-up sequences so you can focus on delivering — not prospecting.",
+  openGraph: {
+    title: "OutreachAI — Outreach That Converts",
+    description: "AI-powered outreach for agencies and freelancers",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -11,13 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-      </head>
-      <body>
+    <html lang="en" className={`${inter.variable} ${syne.variable}`}>
+      <body className="font-inter antialiased">
         {children}
       </body>
     </html>
