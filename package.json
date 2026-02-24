@@ -1,0 +1,16 @@
+{
+  "name": "outreachai",
+  "version": "1.0.0",
+  "description": "OutreachAI — Lead finder and outreach generator",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "apify-client": "^2.9.3"
+  },
+  "devDependencies": {
+    "vercel": "^37.0.0"
+  }
+}
