@@ -212,122 +212,80 @@ export default function LeadsPage() {
         </div>
       </nav>
 
-      <div className="flex min-h-[calc(100vh-65px)]">
+      <div className="grid grid-cols-[320px_1fr] min-h-[calc(100vh-57px)]">
         {/* Sidebar */}
-        <aside className="w-80 border-r border-border px-6 py-7 bg-bg2 flex flex-col gap-6">
+        <aside className="border-r border-border py-7 px-6 bg-bg2 flex flex-col gap-6">
           <div>
-            <h2 className="text-[1.05rem] tracking-[-0.02em] font-syne font-extrabold mb-1">Find Leads</h2>
-            <p className="text-[0.8rem] text-muted2 font-light leading-relaxed">
+            <h2 className="text-lg font-syne font-extrabold mb-2">Find Leads</h2>
+            <p className="text-xs text-muted2 font-light leading-relaxed">
               Enter a location and industry to find businesses missing a website — instant personalized outreach included.
             </p>
           </div>
 
-          <div className="flex flex-col gap-[0.45rem]">
-            <label className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-muted2">📍 Location</label>
-            <input
-              type="text"
-              placeholder="e.g. Chicago, IL"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="bg-bg3 border border-border rounded-[10px] px-4 py-[0.7rem] text-[0.88rem] font-normal text-text outline-none transition-colors focus:border-accent/60 placeholder:text-muted"
-            />
-          </div>
+          <Input
+            label="📍 Location"
+            placeholder="e.g. Chicago, IL"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          />
 
-          <div className="flex flex-col gap-[0.45rem]">
-            <label className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-muted2">🏢 Industry</label>
-            <select
-              value={industry}
-              onChange={(e) => setIndustry(e.target.value)}
-              className="bg-bg3 border border-border rounded-[10px] px-4 py-[0.7rem] text-[0.88rem] font-normal text-text outline-none transition-colors focus:border-accent/60 appearance-none cursor-pointer"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a6480' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "right 1rem center",
-              }}
-            >
-              {INDUSTRY_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value} className="bg-[#0f1520]">
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <Select
+            label="🏢 Industry"
+            options={INDUSTRY_OPTIONS}
+            value={industry}
+            onChange={(e) => setIndustry(e.target.value)}
+          />
 
-          <div className="flex flex-col gap-[0.45rem]">
-            <label className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-muted2">Quick Cities</label>
-            <div className="flex flex-wrap gap-[0.45rem]">
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-semibold uppercase tracking-wider text-muted2">Quick Cities</label>
+            <div className="flex flex-wrap gap-2">
               {CITIES.map((city) => (
-                <button
+                <Chip
                   key={city.value}
+                  active={location === city.value}
                   onClick={() => setLocation(city.value)}
-                  className={`px-[0.85rem] py-[0.35rem] rounded-full text-[0.73rem] font-medium border transition-all duration-150 ${
-                    location === city.value
-                      ? "bg-accent/[0.12] border-accent/40 text-[#a78bfa]"
-                      : "bg-transparent border-border text-muted2 hover:border-accent/40 hover:text-text"
-                  }`}
                 >
                   {city.label}
-                </button>
+                </Chip>
               ))}
             </div>
           </div>
 
           <div className="w-full h-px bg-border" />
 
-          <div className="flex flex-col gap-[0.45rem]">
-            <label className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-muted2">Filter by</label>
-            <div className="flex flex-wrap gap-[0.45rem]">
-              <button
-                onClick={() => setFilter("nowebsite")}
-                className={`px-[0.85rem] py-[0.35rem] rounded-full text-[0.73rem] font-medium border transition-all duration-150 ${
-                  filter === "nowebsite"
-                    ? "bg-accent/[0.12] border-accent/40 text-[#a78bfa]"
-                    : "bg-transparent border-border text-muted2 hover:border-accent/40 hover:text-text"
-                }`}
-              >
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-semibold uppercase tracking-wider text-muted2">Filter by</label>
+            <div className="flex flex-wrap gap-2">
+              <Chip active={filter === "nowebsite"} onClick={() => setFilter("nowebsite")}>
                 🌐 No Website
-              </button>
-              <button
-                onClick={() => setFilter("noreviews")}
-                className={`px-[0.85rem] py-[0.35rem] rounded-full text-[0.73rem] font-medium border transition-all duration-150 ${
-                  filter === "noreviews"
-                    ? "bg-accent/[0.12] border-accent/40 text-[#a78bfa]"
-                    : "bg-transparent border-border text-muted2 hover:border-accent/40 hover:text-text"
-                }`}
-              >
+              </Chip>
+              <Chip active={filter === "noreviews"} onClick={() => setFilter("noreviews")}>
                 ⭐ No Reviews
-              </button>
-              <button
-                onClick={() => setFilter("lowrating")}
-                className={`px-[0.85rem] py-[0.35rem] rounded-full text-[0.73rem] font-medium border transition-all duration-150 ${
-                  filter === "lowrating"
-                    ? "bg-accent/[0.12] border-accent/40 text-[#a78bfa]"
-                    : "bg-transparent border-border text-muted2 hover:border-accent/40 hover:text-text"
-                }`}
-              >
+              </Chip>
+              <Chip active={filter === "lowrating"} onClick={() => setFilter("lowrating")}>
                 📉 Low Rating
-              </button>
+              </Chip>
             </div>
           </div>
 
           {hasSearched && !loading && leads.length > 0 && (
-            <div className="bg-bg3 border border-border rounded-[12px] p-[1rem_1.1rem] flex flex-col gap-[0.6rem]">
+            <div className="bg-bg3 border border-border rounded-xl p-4 flex flex-col gap-2.5">
               <div className="flex justify-between items-center">
                 <span className="text-[0.73rem] text-muted2">Leads found</span>
-                <span className="text-[0.8rem] font-semibold text-[#34d399]">{leads.length}</span>
+                <span className="text-[0.8rem] font-semibold text-[#34d399]">{leads.length} leads</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-[0.73rem] text-muted2">With phone number</span>
-                <span className="text-[0.8rem] font-semibold text-muted2">{leads.filter((l) => l.phone).length}</span>
+                <span className="text-[0.8rem] font-semibold text-muted2">{leads.filter((l) => l.phone).length} / {leads.length}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-[0.73rem] text-muted2">Scraped from Google</span>
-                <span className="text-[0.8rem] font-semibold text-muted2">{scrapedCount}</span>
+                <span className="text-[0.8rem] font-semibold text-muted2">{scrapedCount} businesses</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-[0.73rem] text-muted2">Last run</span>
-                <span className="text-[0.8rem] font-semibold text-[#fbbf24]">Just now</span>
+                <span className="text-[0.8rem] font-semibold text-amber">Just now</span>
               </div>
             </div>
           )}
@@ -335,7 +293,7 @@ export default function LeadsPage() {
           <button
             onClick={handleSearch}
             disabled={loading}
-            className="w-full p-[0.875rem] bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] text-white rounded-xl text-[0.95rem] font-semibold flex items-center justify-center gap-2 shadow-[0_0_28px_rgba(99,102,241,0.35)] hover:shadow-[0_0_42px_rgba(99,102,241,0.55)] hover:-translate-y-[2px] transition-all disabled:opacity-55 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+            className="w-full py-3.5 bg-gradient-to-br from-accent to-accent2 text-white border-none rounded-xl text-[0.95rem] font-semibold font-inter cursor-pointer transition-all duration-200 shadow-[0_0_28px_rgba(99,102,241,0.35)] flex items-center justify-center gap-2 hover:-translate-y-0.5 hover:shadow-[0_0_42px_rgba(99,102,241,0.55)] disabled:opacity-55 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none"
           >
             {loading ? "Searching..." : "🔍 Find Leads"}
           </button>
