@@ -1,21 +1,21 @@
 @import "tailwindcss";
+@import "./tokens.css";
 
 @theme {
   /* Colors */
-  --color-bg: #060910;
-  --color-bg2: #0b0f1a;
-  --color-bg3: #0f1520;
-  --color-bg4: #131927;
-  --color-border: #1a2235;
-  --color-accent: #6366f1;
-  --color-accent2: #8b5cf6;
-  --color-text: #f0f2f8;
-  --color-muted: #5a6480;
-  --color-muted2: #8892aa;
-  --color-green: #10b981;
-  --color-red: #ef4444;
-  --color-amber: #f59e0b;
-  --color-a78bfa: #a78bfa;
+  --color-bg: var(--color-surface);
+  --color-bg2: var(--color-surface-raised);
+  --color-bg3: var(--color-surface-overlay);
+  --color-bg4: var(--color-neutral-800);
+  --color-accent: var(--color-primary);
+  --color-accent2: var(--color-primary-hover);
+  --color-text: var(--color-neutral-50);
+  --color-muted: var(--color-neutral-500);
+  --color-muted2: var(--color-neutral-300);
+  --color-green: var(--color-success);
+  --color-red: var(--color-error);
+  --color-amber: var(--color-warning);
+  --color-a78bfa: var(--color-primary-hover);
 
   /* Fonts */
   --font-syne: "Syne", sans-serif;
