@@ -7,12 +7,19 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:setup": "docker compose up -d postgres && sleep 3 && bun run db:migrate"
   },
   "dependencies": {
     "apify-client": "^2.9.3",
+    "drizzle-orm": "^0.45.1",
     "lucide-react": "^0.575.0",
     "next": "^16.1.6",
+    "postgres": "^3.4.8",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
@@ -22,6 +29,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
+    "drizzle-kit": "^0.31.9",
     "eslint": "^9.39.3",
     "eslint-config-next": "^16.1.6",
     "tailwindcss": "^4.2.1",

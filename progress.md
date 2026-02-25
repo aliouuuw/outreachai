@@ -46,6 +46,50 @@ Consequences: Future UI components should use the canonical token names directly
 
 **Gate status:** Ready to implement.
 
+### infra-01 — Implementation
+
+**Status:** Complete
+**Time:** ~1h
+
+**What was built:**
+Docker Compose config for local PostgreSQL, Drizzle ORM schema for all four core tables (`users`/`sessions`/`accounts`/`verifications`, `subscriptions`, `usage_quotas`, `saved_leads`), initial SQL migration generated, and all db scripts wired into `package.json`.
+
+**Artifacts produced:**
+- `docker-compose.yml` — PostgreSQL 16 service with health check and named volume
+- `.env.example` — all required env vars documented with instructions
+- `src/db/schema/users.ts` — users + sessions + accounts + verifications (better-auth compatible)
+- `src/db/schema/subscriptions.ts` — subscription tier/status enums + subscriptions table
+- `src/db/schema/usage_quotas.ts` — per-period usage counters (leadSearches, leadsReturned, aiMessages)
+- `src/db/schema/saved_leads.ts` — saved lead records with full Google Places field set
+- `src/db/schema/index.ts` — barrel export
+- `src/db/index.ts` — drizzle client singleton
+- `drizzle.config.ts` — drizzle-kit config pointing at schema
+- `drizzle/0000_quiet_kingpin.sql` — initial migration (7 tables)
+
+**Dependencies installed:** `drizzle-orm@0.45.1`, `postgres@3.4.8`, `drizzle-kit@0.31.9`
+
+**Scripts added to package.json:**
+- `db:generate` — generate new migration from schema diff
+- `db:migrate` — apply migrations to database
+- `db:push` — push schema directly (dev only)
+- `db:studio` — open Drizzle Studio
+- `db:setup` — start Docker + run migrations
+
+**Design decisions:**
+- Used `postgres` (postgres.js) driver over `pg` — better performance, native async/await, no callback hell
+- `users` table schema matches better-auth expectations exactly so auth-01 can drop in without migration changes
+- `subscriptions` uses DB-level enums for `tier` and `status` — enforces valid values at the database layer
+- `usage_quotas` tracks per-period (not cumulative) usage — period boundaries come from Stripe's billing cycle
+- `drizzle.config.ts` uses `?? fallback` URL so `drizzle-kit generate` works without env vars; migrate/push still require DATABASE_URL at runtime
+
+**Assumptions made:**
+- better-auth v1 expects the exact column names used in `users`/`sessions`/`accounts`/`verifications` tables
+- UUID generation for IDs will be handled at the application layer (not DB default) to keep it consistent with better-auth
+
+**UI QA:** N/A (non-UI task)
+
+---
+
 ### foundation-02 — Implementation
 
 - Added shared pattern components in `src/components/ui/`:

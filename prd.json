@@ -78,7 +78,8 @@
       "title": "Set up development environment and database",
       "priority": 3,
       "type": "non-ui",
-      "status": "pending",
+      "status": "completed",
+      "completed_date": "2026-02-25",
       "description": "Create Docker Compose for local Postgres, initialize Drizzle schema, set up .env.example, and configure development scripts.",
       "acceptance_criteria": [
         "docker-compose.yml with PostgreSQL service",
@@ -289,9 +290,9 @@
   ],
   "stats": {
     "total_tasks": 12,
-    "completed": 2,
+    "completed": 3,
     "in_progress": 0,
-    "pending": 10,
+    "pending": 9,
     "ui_tasks": 4,
     "non_ui_tasks": 8,
     "total_estimated_hours": 112
