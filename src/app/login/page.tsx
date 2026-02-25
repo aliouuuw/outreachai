@@ -7,6 +7,7 @@ import { signIn } from "@/lib/auth-client";
 import { errors } from "@/copy/errors";
 import { labels } from "@/copy/labels";
 import { AuthLayout } from "@/components/layout/AuthLayout";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -96,17 +98,28 @@ export default function LoginPage() {
               {labels.auth.forgotPassword}
             </Link>
           </div>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            placeholder={labels.auth.passwordPlaceholder}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            disabled={isLoading}
-            className="auth-input"
-          />
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              placeholder={labels.auth.passwordPlaceholder}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={isLoading}
+              className="auth-input pr-[var(--space-12)]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              disabled={isLoading}
+              className="absolute inset-y-0 right-[var(--space-3)] flex items-center justify-center text-[var(--color-neutral-400)] hover:text-[var(--color-neutral-200)] transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)] disabled:opacity-50"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
+            </button>
+          </div>
         </div>
 
         <button

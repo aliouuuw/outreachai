@@ -7,6 +7,7 @@ import { signUp } from "@/lib/auth-client";
 import { errors } from "@/copy/errors";
 import { labels } from "@/copy/labels";
 import { AuthLayout } from "@/components/layout/AuthLayout";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -15,6 +16,8 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -114,18 +117,29 @@ export default function SignupPage() {
           <label htmlFor="password" className="text-[var(--text-sm)] font-medium text-[var(--color-neutral-200)]">
             {labels.auth.password}
           </label>
-          <input
-            id="password"
-            type="password"
-            autoComplete="new-password"
-            placeholder={labels.auth.passwordPlaceholder}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={8}
-            disabled={isLoading}
-            className="auth-input"
-          />
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              placeholder={labels.auth.passwordPlaceholder}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={8}
+              disabled={isLoading}
+              className="auth-input pr-[var(--space-12)]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              disabled={isLoading}
+              className="absolute inset-y-0 right-[var(--space-3)] flex items-center justify-center text-[var(--color-neutral-400)] hover:text-[var(--color-neutral-200)] transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)] disabled:opacity-50"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
+            </button>
+          </div>
           <p className="text-[var(--text-caption)] text-[var(--color-neutral-500)]">
             {labels.auth.passwordMinLength}
           </p>
@@ -135,20 +149,31 @@ export default function SignupPage() {
           <label htmlFor="confirmPassword" className="text-[var(--text-sm)] font-medium text-[var(--color-neutral-200)]">
             {labels.auth.confirmPassword}
           </label>
-          <input
-            id="confirmPassword"
-            type="password"
-            autoComplete="new-password"
-            placeholder={labels.auth.confirmPasswordPlaceholder}
-            value={confirmPassword}
-            onChange={(e) => {
-              setConfirmPassword(e.target.value);
-              if (passwordError) setPasswordError(null);
-            }}
-            required
-            disabled={isLoading}
-            className="auth-input"
-          />
+          <div className="relative">
+            <input
+              id="confirmPassword"
+              type={showConfirmPassword ? "text" : "password"}
+              autoComplete="new-password"
+              placeholder={labels.auth.confirmPasswordPlaceholder}
+              value={confirmPassword}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                if (passwordError) setPasswordError(null);
+              }}
+              required
+              disabled={isLoading}
+              className="auth-input pr-[var(--space-12)]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword((v) => !v)}
+              disabled={isLoading}
+              className="absolute inset-y-0 right-[var(--space-3)] flex items-center justify-center text-[var(--color-neutral-400)] hover:text-[var(--color-neutral-200)] transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)] disabled:opacity-50"
+              aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+            >
+              {showConfirmPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
+            </button>
+          </div>
           {passwordError && (
             <p className="text-[var(--text-caption)] text-[var(--color-error)]">{passwordError}</p>
           )}
