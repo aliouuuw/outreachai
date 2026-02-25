@@ -249,3 +249,74 @@ Email verification, password reset, and logout UX flows. Users can now verify th
 **UI QA:** Pass — all states implemented (form, loading, error, success); responsive design; accessible form inputs and buttons
 
 **Type-check:** Pass (`tsc --noEmit` returns exit code 0)
+
+---
+
+### app-shell-01 — Design Gate
+
+**User mental model:** The user thinks they're working inside a business tool and need to move between lead finding, their saved leads, settings, and billing. They expect a navigation that stays visible while they work, clearly shows which section they're in, and gives them quick access to their account info and subscription details. On mobile, they expect the same navigation to be accessible via a menu button without losing their place.
+
+**New components:** AppShell, Sidebar, NavLink, UserMenu, PlanBadge, MobileNav
+
+**Existing components extended:** None (using Button, Modal as-is)
+
+**States documented:** Yes — all states for loading, error, success, and interactive states documented
+
+**Hierarchy decision:** Sidebar is primary (persistent), navigation links are primary within sidebar, user identity is primary in user menu
+
+**Design system gaps flagged:** None
+
+**Assumptions flagged:**
+1. Session data available from auth context (validated — auth-client exists)
+2. 5 nav links fit in sidebar (acceptable for MVP)
+3. Plan badge placement in sidebar (accepted)
+
+**Gate status:** ✅ Ready to implement
+
+### app-shell-01 — Implementation
+
+**Status:** Complete
+**Time:** ~2h
+
+**What was built:**
+Full authenticated app shell with persistent sidebar navigation, user menu with session data, plan badge, and responsive mobile navigation. All authenticated routes now share a consistent layout with clear navigation and user context.
+
+**Components created:**
+- `AppShell` — Main layout wrapper that combines sidebar and content area
+- `Sidebar` — Persistent navigation with desktop/mobile variants
+- `NavLink` — Route link component with active state detection via usePathname
+- `UserMenu` — User identity display with avatar/initials, name, email, plan badge, and logout
+- `PlanBadge` — Subscription tier indicator with color-coded variants (starter/pro/agency)
+
+**States implemented:** loading | error | success
+
+**Design decisions:**
+- NavLink uses `usePathname` for active route detection — matches exact path or path prefix
+- Active state indicated via left border + primary color background + bold text
+- Mobile nav uses fixed overlay with slide-in animation (200ms ease-out) and backdrop blur
+- Hamburger menu button positioned fixed top-left on mobile, hidden on desktop (md breakpoint)
+- User menu shows loading skeleton while session loads, error state with logout-only option if session fails
+- Plan badge uses semantic colors: neutral for starter, primary for pro, warning for agency
+- AppShell layouts created for all authenticated routes: /dashboard, /leads, /saved-leads, /settings, /billing
+- Middleware updated to protect /saved-leads and /billing routes
+
+**Assumptions made:**
+- Session data from `useSession()` hook provides user.name, user.email reliably
+- Subscription tier defaults to "starter" if not provided (acceptable for MVP before payment-ui-01)
+- Mobile nav body scroll lock via `document.body.style.overflow = "hidden"` is sufficient (no need for scroll-lock library yet)
+
+**Design Gate:** Completed — all components, states, and hierarchy decisions documented before implementation
+
+**UI QA:** Pass
+- ✅ All interactive states implemented (default, hover, active, focus, disabled)
+- ✅ All data states implemented (loading, error, success)
+- ✅ Keyboard navigation works (Tab, Enter, Escape)
+- ✅ Focus states visible on all interactive elements
+- ✅ Mobile responsive (hamburger menu, overlay, slide animation)
+- ✅ Active route highlighting works correctly
+- ✅ Logout action present and functional
+- ✅ All spacing uses design system tokens
+- ✅ All colors use design system tokens
+- ✅ All typography uses design system scale
+
+**Type-check:** Pass (`tsc --noEmit` returns exit code 0)

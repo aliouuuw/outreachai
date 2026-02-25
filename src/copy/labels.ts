@@ -20,4 +20,18 @@ export const labels = {
     password: "Mot de passe",
     confirmPassword: "Confirmer le mot de passe",
   },
+  nav: {
+    dashboard: "Tableau de bord",
+    leadFinder: "Recherche de leads",
+    savedLeads: "Leads sauvegardés",
+    settings: "Paramètres",
+    billing: "Facturation",
+    menu: "Menu",
+    closeMenu: "Fermer le menu",
+  },
+  plan: {
+    starter: "Starter",
+    pro: "Pro",
+    agency: "Agency",
+  },
 } as const;

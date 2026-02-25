@@ -1,4 +1,4 @@
-export default function DashboardPage() {
+export default function SettingsPage() {
   return (
     <div>
       <h1
@@ -8,7 +8,7 @@ export default function DashboardPage() {
           color: "var(--color-neutral-50)",
         }}
       >
-        Dashboard
+        Settings
       </h1>
       <p
         style={{
@@ -17,7 +17,7 @@ export default function DashboardPage() {
           marginTop: "var(--space-2)",
         }}
       >
-        Welcome to OutreachAI
+        Manage your account settings
       </p>
     </div>
   );
