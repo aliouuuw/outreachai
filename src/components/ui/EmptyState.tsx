@@ -26,18 +26,18 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div
-      className={`flex flex-col items-center text-center gap-4 p-8 border border-border rounded-xl bg-bg2 ${className}`}
+      className={`flex flex-col items-center text-center gap-[var(--space-4)] p-[var(--space-8)] border border-[var(--color-border)] rounded-[var(--radius-xl)] bg-[var(--color-surface-raised)] ${className}`}
       role="status"
       aria-live="polite"
     >
       {icon && (
-        <div className="text-3xl text-accent" aria-hidden>
+        <div className="text-[var(--color-primary)]" aria-hidden="true">
           {icon}
         </div>
       )}
-      <div className="space-y-2 max-w-md">
-        <h3 className="text-h4 font-semibold text-text tracking-tight">{title}</h3>
-        <p className="text-sm text-muted2 leading-relaxed">{description}</p>
+      <div className="flex flex-col gap-[var(--space-2)] max-w-md">
+        <h3 className="text-[var(--text-h4)] font-semibold text-[var(--color-neutral-50)] tracking-tight">{title}</h3>
+        <p className="text-[var(--text-sm)] text-[var(--color-neutral-400)] leading-relaxed">{description}</p>
       </div>
       {action && (
         <Button

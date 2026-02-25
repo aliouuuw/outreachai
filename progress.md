@@ -324,3 +324,40 @@ Persistent authenticated layout shell with desktop sidebar, mobile hamburger nav
 **UI QA:** Pass — all states implemented (loading skeleton, error with retry/logout, success with active routes); responsive (mobile hamburger → slide-in nav); keyboard accessible (focus rings, escape to close, tab navigation); accessible (ARIA labels, roles, landmarks)
 
 **Type-check:** Pass (`tsc --noEmit` returns exit code 0)
+
+---
+
+### dashboard-ui-01 — Implementation
+
+**Status:** Complete
+
+**What was done:**
+Major UI overhaul of the Dashboard and Lead Finder pages, plus core component migration to design system tokens.
+
+**Files changed:**
+- `src/components/ui/Button.tsx` — rewrote to use design tokens for all colors, spacing, radius, shadows; added `danger` variant; added focus ring; added proper token-based sizing
+- `src/components/ui/EmptyState.tsx` — migrated all styles to design tokens (colors, spacing, radius)
+- `src/components/ui/Modal.tsx` — migrated all styles to design tokens; added shadow, aria-label on close button
+- `src/app/dashboard/page.tsx` — added usage stats row (scans, leads found, saved leads); added section headers; improved spacing hierarchy; added icon to empty state
+- `src/app/leads/page.tsx` — full rewrite: removed duplicate embedded nav bar (now uses AppShell from layout), redesigned filter bar with token-based inputs, replaced placeholder empty state with EmptyState component, replaced raw error/loading states with proper token-styled versions, converted div-grid to semantic HTML table, added Lucide icons throughout, improved accessibility
+- `src/app/globals.css` — scoped bare `nav` selector to `.landing-nav` class (was leaking fixed positioning into sidebar), scoped bare `section` selector to landing page sections only
+- `src/app/page.tsx` — added `landing-nav` class to nav element
+- `src/app/features/page.tsx` — added `landing-nav` class to nav element
+
+**Design decisions:**
+- Decision: Remove embedded nav from Lead Finder page
+  Alternatives considered: Keep embedded nav alongside AppShell
+  Reason: The leads page had its own nav bar that duplicated and conflicted with the AppShell sidebar; removing it gives a consistent authenticated layout
+  Consequences: All authenticated pages now share the same AppShell navigation pattern
+
+- Decision: Scope global CSS `nav` and `section` selectors to landing page classes
+  Alternatives considered: Leave bare selectors and override in components
+  Reason: Bare `nav` selector was applying `position: fixed`, `backdrop-filter: blur`, `z-index: 500` to ALL nav elements including sidebar; bare `section` was applying `position: relative; z-index: 1` to dashboard sections
+  Consequences: Landing page styles no longer leak into authenticated app shell
+
+- Decision: Use semantic `<table>` for lead results instead of CSS grid divs
+  Alternatives considered: Keep grid layout
+  Reason: Table semantics are correct for tabular data; improves accessibility for screen readers; simpler responsive overflow handling
+  Consequences: Table is horizontally scrollable on small screens
+
+**Type-check:** Pass (`bunx tsc --noEmit` returns exit code 0)

@@ -245,7 +245,7 @@ export default function Home() {
       <div id="cursor-glow"></div>
       <canvas id="bg-canvas"></canvas>
 
-      <nav id="navbar">
+      <nav id="navbar" className="landing-nav">
         <div className="nav-logo">OutreachAI</div>
         <ul className="nav-links">
           <li><a href="#features">Features</a></li>

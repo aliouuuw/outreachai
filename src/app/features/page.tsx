@@ -113,7 +113,7 @@ export default function FeaturesPage() {
       <div id="cursor-glow"></div>
       <canvas id="bg-canvas"></canvas>
 
-      <nav id="navbar">
+      <nav id="navbar" className="landing-nav">
         <Link href="/" className="nav-logo">OutreachAI</Link>
         <ul className="nav-links">
           <li><Link href="/features" className="active">Features</Link></li>
