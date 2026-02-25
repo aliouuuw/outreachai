@@ -82,6 +82,97 @@
   animation: modalIn 0.2s cubic-bezier(.22,.68,0,1) forwards;
 }
 
+/* Auth page decorative elements — using design token colors */
+.auth-orb {
+  position: absolute;
+  width: 384px;
+  height: 384px;
+  border-radius: 9999px;
+  filter: blur(48px);
+  opacity: 0.15;
+  pointer-events: none;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.auth-orb--top-left {
+  top: 0;
+  left: 25%;
+  background: var(--color-primary);
+}
+
+.auth-orb--bottom-right {
+  bottom: 0;
+  right: 25%;
+  background: var(--color-primary-hover);
+  animation-delay: 1s;
+}
+
+.auth-orb--mid-right {
+  top: 50%;
+  right: 0;
+  background: var(--color-primary);
+  opacity: 0.08;
+  animation-delay: 2s;
+}
+
+.auth-grid {
+  background-image:
+    linear-gradient(0deg, transparent 24%, var(--color-primary-subtle) 25%, var(--color-primary-subtle) 26%, transparent 27%, transparent 74%, var(--color-primary-subtle) 75%, var(--color-primary-subtle) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, var(--color-primary-subtle) 25%, var(--color-primary-subtle) 26%, transparent 27%, transparent 74%, var(--color-primary-subtle) 75%, var(--color-primary-subtle) 76%, transparent 77%, transparent);
+  background-size: 80px 80px;
+}
+
+/* Auth form shared input styles */
+.auth-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-overlay);
+  border: 1px solid var(--color-border);
+  color: var(--color-neutral-50);
+  font-size: var(--text-sm);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.auth-input::placeholder {
+  color: var(--color-neutral-500);
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-subtle);
+}
+
+.auth-input:disabled {
+  opacity: 0.5;
+}
+
+/* Auth primary button */
+.auth-btn-primary {
+  width: 100%;
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--text-base);
+  color: white;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  box-shadow: var(--shadow-md);
+  transition: opacity 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+  cursor: pointer;
+  border: none;
+}
+
+.auth-btn-primary:hover:not(:disabled) {
+  opacity: 0.9;
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Custom cursor - disabled on auth pages */
 body {
   cursor: none;

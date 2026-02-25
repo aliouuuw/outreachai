@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "@/lib/auth-client";
 import { errors } from "@/copy/errors";
+import { labels } from "@/copy/labels";
+import { AuthLayout } from "@/components/layout/AuthLayout";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -43,129 +45,94 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden flex items-center justify-center px-4" data-no-custom-cursor>
-      {/* Animated gradient orbs */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
-      <div className="absolute top-1/2 right-0 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }}></div>
-
-      {/* Grid background */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(99, 102, 241, 0.05) 25%, rgba(99, 102, 241, 0.05) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, 0.05) 75%, rgba(99, 102, 241, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(99, 102, 241, 0.05) 25%, rgba(99, 102, 241, 0.05) 26%, transparent 27%, transparent 74%, rgba(99, 102, 241, 0.05) 75%, rgba(99, 102, 241, 0.05) 76%, transparent 77%, transparent)',
-          backgroundSize: '80px 80px'
-        }}></div>
-      </div>
-
-      <div className="relative w-full max-w-md">
-        {/* Header */}
-        <div className="mb-10 text-center space-y-2">
-          <Link href="/" className="inline-block mb-6">
-            <span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-              OutreachAI
-            </span>
-          </Link>
-          <h1 className="text-4xl font-bold text-white">
-            Welcome back
-          </h1>
-          <p className="text-slate-300 text-base">
-            Sign in to your account to continue
-          </p>
-        </div>
-
-        {/* Form Card */}
-        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-8 shadow-2xl">
-          {error && (
-            <div
-              role="alert"
-              className="mb-6 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm animate-in fade-in"
-            >
-              {error}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
-            {/* Email Field */}
-            <div className="flex flex-col gap-2.5">
-              <label htmlFor="email" className="text-sm font-medium text-slate-300">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={isLoading}
-                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/30 focus:bg-white/15 transition-all duration-200 disabled:opacity-50"
-              />
-            </div>
-
-            {/* Password Field */}
-            <div className="flex flex-col gap-2.5">
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="text-sm font-medium text-slate-300">
-                  Password
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-indigo-400 hover:text-indigo-300 font-medium transition-colors duration-150"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <input
-                id="password"
-                type="password"
-                autoComplete="current-password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={isLoading}
-                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/30 focus:bg-white/15 transition-all duration-200 disabled:opacity-50"
-              />
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isLoading || !email || !password}
-              className="w-full mt-4 px-6 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-indigo-500/25"
-            >
-              {isLoading ? "Signing in…" : "Sign in"}
-            </button>
-          </form>
-
-          {/* Divider */}
-          <div className="my-6 flex items-center gap-3">
-            <div className="flex-1 h-px bg-white/10"></div>
-            <span className="text-xs text-slate-500">or</span>
-            <div className="flex-1 h-px bg-white/10"></div>
-          </div>
-
-          {/* Sign Up Link */}
-          <p className="text-center text-sm text-slate-300 mt-4">
-            Don't have an account?{" "}
-            <Link
-              href="/signup"
-              className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors duration-150"
-            >
-              Create one
-            </Link>
-          </p>
-        </div>
-
-        {/* Footer */}
-        <p className="text-center text-xs text-slate-400 mt-8">
-          By continuing, you agree to our{" "}
-          <Link href="#" className="text-indigo-400 hover:text-indigo-300">
-            Terms of Service
+    <AuthLayout
+      title={labels.auth.loginTitle}
+      subtitle={labels.auth.loginSubtitle}
+      footer={
+        <p className="text-[var(--text-caption)] text-[var(--color-neutral-400)]">
+          {labels.auth.termsPrefix}{" "}
+          <Link href="#" className="text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] transition-colors duration-150">
+            {labels.auth.termsLink}
           </Link>
         </p>
+      }
+    >
+      {error && (
+        <div
+          role="alert"
+          className="mb-[var(--space-6)] px-[var(--space-4)] py-[var(--space-3)] rounded-[var(--radius-md)] bg-[var(--color-error-subtle)] border border-[var(--color-error)]/30 text-[var(--color-error)] text-[var(--text-sm)]"
+        >
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-[var(--space-4)]">
+        <div className="flex flex-col gap-[var(--space-2)]">
+          <label htmlFor="email" className="text-[var(--text-sm)] font-medium text-[var(--color-neutral-200)]">
+            {labels.auth.email}
+          </label>
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            placeholder={labels.auth.emailPlaceholder}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            disabled={isLoading}
+            className="auth-input"
+          />
+        </div>
+
+        <div className="flex flex-col gap-[var(--space-2)]">
+          <div className="flex items-center justify-between">
+            <label htmlFor="password" className="text-[var(--text-sm)] font-medium text-[var(--color-neutral-200)]">
+              {labels.auth.password}
+            </label>
+            <Link
+              href="/forgot-password"
+              className="text-[var(--text-sm)] text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] font-medium transition-colors duration-150"
+            >
+              {labels.auth.forgotPassword}
+            </Link>
+          </div>
+          <input
+            id="password"
+            type="password"
+            autoComplete="current-password"
+            placeholder={labels.auth.passwordPlaceholder}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            disabled={isLoading}
+            className="auth-input"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={isLoading || !email || !password}
+          className="auth-btn-primary mt-[var(--space-4)]"
+        >
+          {isLoading ? labels.auth.signingIn : labels.auth.login}
+        </button>
+      </form>
+
+      <div className="my-[var(--space-6)] flex items-center gap-[var(--space-3)]">
+        <div className="flex-1 h-px bg-[var(--color-border)]" />
+        <span className="text-[var(--text-caption)] text-[var(--color-neutral-500)]">{labels.common.or}</span>
+        <div className="flex-1 h-px bg-[var(--color-border)]" />
       </div>
-    </div>
+
+      <p className="text-center text-[var(--text-sm)] text-[var(--color-neutral-300)]">
+        {labels.auth.noAccount}{" "}
+        <Link
+          href="/signup"
+          className="text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] font-semibold transition-colors duration-150"
+        >
+          {labels.auth.createOne}
+        </Link>
+      </p>
+    </AuthLayout>
   );
 }

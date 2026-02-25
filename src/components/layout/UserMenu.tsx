@@ -59,14 +59,7 @@ export function UserMenu({ user, isLoading, onLogout }: UserMenuProps) {
     <div ref={menuRef} className="relative">
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`
-          w-full flex items-center gap-[var(--space-3)] px-[var(--space-3)] py-[var(--space-2)]
-          rounded-[var(--radius-md)] text-left
-          transition-colors duration-150
-          hover:bg-[var(--color-surface-overlay)]
-          outline-none
-          focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]
-        `}
+        className="w-full flex items-center gap-[var(--space-3)] px-[var(--space-3)] py-[var(--space-2)] rounded-[var(--radius-md)] text-left transition-colors duration-150 hover:bg-[var(--color-surface-overlay)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]"
         aria-label={labels.shell.userMenuLabel}
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -86,23 +79,15 @@ export function UserMenu({ user, isLoading, onLogout }: UserMenuProps) {
         </span>
         <ChevronUp
           size={16}
-          className={`
-            flex-shrink-0 text-[var(--color-neutral-500)]
-            transition-transform duration-150
-            ${isOpen ? "rotate-0" : "rotate-180"}
-          `}
+          className={`flex-shrink-0 text-[var(--color-neutral-500)] transition-transform duration-150 ${
+            isOpen ? "rotate-0" : "rotate-180"
+          }`}
         />
       </button>
 
       {isOpen && (
         <div
-          className="
-            absolute bottom-full left-0 right-0 mb-[var(--space-2)]
-            bg-[var(--color-surface-raised)] border border-[var(--color-border)]
-            rounded-[var(--radius-lg)] shadow-[var(--shadow-lg)]
-            py-[var(--space-1)] overflow-hidden
-            animate-modal-in
-          "
+          className="absolute bottom-full left-0 right-0 mb-[var(--space-2)] bg-[var(--color-surface-raised)] border border-[var(--color-border)] rounded-[var(--radius-lg)] shadow-[var(--shadow-lg)] py-[var(--space-1)] overflow-hidden animate-modal-in"
           role="menu"
         >
           <button
@@ -110,14 +95,7 @@ export function UserMenu({ user, isLoading, onLogout }: UserMenuProps) {
               setIsOpen(false);
               onLogout();
             }}
-            className="
-              w-full flex items-center gap-[var(--space-3)] px-[var(--space-4)] py-[var(--space-2)]
-              text-[var(--text-sm)] text-[var(--color-neutral-400)]
-              hover:bg-[var(--color-surface-overlay)] hover:text-[var(--color-error)]
-              transition-colors duration-150
-              outline-none
-              focus-visible:bg-[var(--color-surface-overlay)] focus-visible:text-[var(--color-error)]
-            "
+            className="w-full flex items-center gap-[var(--space-3)] px-[var(--space-4)] py-[var(--space-2)] text-[var(--text-sm)] text-[var(--color-neutral-400)] hover:bg-[var(--color-surface-overlay)] hover:text-[var(--color-error)] transition-colors duration-150 outline-none focus-visible:bg-[var(--color-surface-overlay)] focus-visible:text-[var(--color-error)]"
             role="menuitem"
           >
             <LogOut size={16} />

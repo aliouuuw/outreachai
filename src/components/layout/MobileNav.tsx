@@ -57,24 +57,18 @@ export function MobileNav({
     <>
       {/* Backdrop */}
       <div
-        className={`
-          fixed inset-0 z-40
-          bg-black/60 backdrop-blur-sm
-          transition-opacity duration-200
-          ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
-        `}
+        className={`fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-200 ${
+          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Slide-in panel */}
       <div
-        className={`
-          fixed inset-y-0 left-0 z-50
-          w-[280px] max-w-[85vw]
-          transition-transform duration-200 ease-out
-          ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        `}
+        className={`fixed inset-y-0 left-0 z-50 w-[280px] max-w-[85vw] transition-transform duration-200 ease-out ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
         role="dialog"
         aria-modal="true"
         aria-label="Navigation"
@@ -82,16 +76,7 @@ export function MobileNav({
         {/* Close button */}
         <button
           onClick={onClose}
-          className="
-            absolute top-[var(--space-4)] right-[var(--space-4)] z-10
-            w-8 h-8 flex items-center justify-center
-            rounded-[var(--radius-md)]
-            text-[var(--color-neutral-400)]
-            hover:bg-[var(--color-surface-overlay)] hover:text-[var(--color-neutral-200)]
-            transition-colors duration-150
-            outline-none
-            focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]
-          "
+          className="absolute top-[var(--space-4)] right-[var(--space-4)] z-10 w-8 h-8 flex items-center justify-center rounded-[var(--radius-md)] text-[var(--color-neutral-400)] hover:bg-[var(--color-surface-overlay)] hover:text-[var(--color-neutral-200)] transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
           aria-label={labels.shell.closeMenu}
         >
           <X size={20} />

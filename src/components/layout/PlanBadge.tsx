@@ -48,14 +48,9 @@ export function PlanBadge({ tier, isLoading, className = "" }: PlanBadgeProps) {
 
   return (
     <span
-      className={`
-        inline-flex items-center px-2 py-0.5
-        text-[var(--text-caption)] font-semibold uppercase tracking-wider
-        rounded-full border
-        transition-colors duration-150
-        ${TIER_STYLES[resolvedTier]}
-        ${className}
-      `}
+      className={`inline-flex items-center px-2 py-0.5 text-[var(--text-caption)] font-semibold uppercase tracking-wider rounded-full border transition-colors duration-150 ${
+        TIER_STYLES[resolvedTier]
+      } ${className}`}
     >
       {TIER_LABELS[resolvedTier]}
     </span>

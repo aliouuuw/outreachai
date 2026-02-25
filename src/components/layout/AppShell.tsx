@@ -10,7 +10,7 @@
  */
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Menu } from "lucide-react";
 import { useSession, signOut } from "@/lib/auth-client";
@@ -29,6 +29,13 @@ export function AppShell({ children }: AppShellProps) {
   const router = useRouter();
   const { data: session, isPending, error } = useSession();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.setAttribute("data-no-custom-cursor", "true");
+    return () => {
+      document.body.removeAttribute("data-no-custom-cursor");
+    };
+  }, []);
 
   async function handleLogout() {
     await signOut();
@@ -86,15 +93,7 @@ export function AppShell({ children }: AppShellProps) {
         <header className="md:hidden sticky top-0 z-30 flex items-center justify-between px-[var(--space-4)] py-[var(--space-3)] bg-[var(--color-surface-raised)] border-b border-[var(--color-border)]">
           <button
             onClick={() => setMobileNavOpen(true)}
-            className="
-              w-10 h-10 flex items-center justify-center
-              rounded-[var(--radius-md)]
-              text-[var(--color-neutral-400)]
-              hover:bg-[var(--color-surface-overlay)] hover:text-[var(--color-neutral-200)]
-              transition-colors duration-150
-              outline-none
-              focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]
-            "
+            className="w-10 h-10 flex items-center justify-center rounded-[var(--radius-md)] text-[var(--color-neutral-400)] hover:bg-[var(--color-surface-overlay)] hover:text-[var(--color-neutral-200)] transition-colors duration-150 outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
             aria-label={labels.shell.openMenu}
           >
             <Menu size={24} />

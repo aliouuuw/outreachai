@@ -52,11 +52,7 @@ export function Sidebar({
 
   return (
     <aside
-      className="
-        flex flex-col h-full
-        bg-[var(--color-surface-raised)]
-        border-r border-[var(--color-border)]
-      "
+      className="flex flex-col h-full bg-[var(--color-surface-raised)] border-r border-[var(--color-border)]"
     >
       {/* Logo / Brand */}
       <div className="flex items-center gap-[var(--space-3)] px-[var(--space-4)] py-[var(--space-6)]">
