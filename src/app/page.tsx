@@ -5,27 +5,6 @@ import Link from 'next/link';
 
 export default function Home() {
   useEffect(() => {
-    // CUSTOM CURSOR
-    const cursor = document.getElementById('cursor')!;
-    const cursorGlow = document.getElementById('cursor-glow')!;
-    let mx = 0, my = 0;
-    let gx = window.innerWidth / 2, gy = window.innerHeight / 2;
-
-    const onMouseMove = (e: MouseEvent) => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.left = mx + 'px';
-      cursor.style.top = my + 'px';
-    };
-    document.addEventListener('mousemove', onMouseMove);
-
-    function animateCursor() {
-      gx += (mx - gx) * 0.08;
-      gy += (my - gy) * 0.08;
-      cursorGlow.style.left = gx + 'px';
-      cursorGlow.style.top = gy + 'px';
-      requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
 
     // ANIMATED PARTICLE GRID CANVAS
     const canvas = document.getElementById('bg-canvas') as HTMLCanvasElement;
@@ -230,7 +209,6 @@ export default function Home() {
     document.querySelectorAll('.stats-grid > .fade-up').forEach(el => counterObserver.observe(el));
 
     return () => {
-      document.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', resize);
       cancelAnimationFrame(animId);
@@ -241,8 +219,6 @@ export default function Home() {
 
   return (
     <>
-      <div id="cursor"></div>
-      <div id="cursor-glow"></div>
       <canvas id="bg-canvas"></canvas>
 
       <nav id="navbar" className="landing-nav">

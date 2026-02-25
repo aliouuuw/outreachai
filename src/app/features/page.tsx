@@ -5,26 +5,6 @@ import Link from 'next/link';
 
 export default function FeaturesPage() {
   useEffect(() => {
-    // CUSTOM CURSOR
-    const cursor = document.getElementById('cursor')!;
-    const cursorGlow = document.getElementById('cursor-glow')!;
-    let mx = 0, my = 0, gx = window.innerWidth / 2, gy = window.innerHeight / 2;
-
-    const onMouseMove = (e: MouseEvent) => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.left = mx + 'px';
-      cursor.style.top = my + 'px';
-    };
-    document.addEventListener('mousemove', onMouseMove);
-
-    function animCursor() {
-      gx += (mx - gx) * 0.08;
-      gy += (my - gy) * 0.08;
-      cursorGlow.style.left = gx + 'px';
-      cursorGlow.style.top = gy + 'px';
-      requestAnimationFrame(animCursor);
-    }
-    animCursor();
 
     // ANIMATED BG CANVAS
     const canvas = document.getElementById('bg-canvas') as HTMLCanvasElement;
@@ -99,7 +79,6 @@ export default function FeaturesPage() {
     document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 
     return () => {
-      document.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', resize);
       cancelAnimationFrame(animId);
@@ -109,8 +88,6 @@ export default function FeaturesPage() {
 
   return (
     <>
-      <div id="cursor"></div>
-      <div id="cursor-glow"></div>
       <canvas id="bg-canvas"></canvas>
 
       <nav id="navbar" className="landing-nav">

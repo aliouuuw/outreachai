@@ -20,7 +20,6 @@ export function AuthLayout({ title, subtitle, children, footer }: AuthLayoutProp
   return (
     <div
       className="relative min-h-screen bg-[var(--color-surface)] overflow-hidden flex items-center justify-center px-[var(--space-4)]"
-      data-no-custom-cursor
     >
       {/* Ambient glow orbs — decorative, use primary token color via CSS */}
       <div className="auth-orb auth-orb--top-left" aria-hidden="true" />

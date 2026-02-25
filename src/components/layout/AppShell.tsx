@@ -31,10 +31,7 @@ export function AppShell({ children }: AppShellProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
-    document.body.setAttribute("data-no-custom-cursor", "true");
-    return () => {
-      document.body.removeAttribute("data-no-custom-cursor");
-    };
+    // No custom cursor logic needed
   }, []);
 
   async function handleLogout() {
@@ -64,7 +61,7 @@ export function AppShell({ children }: AppShellProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-surface)] flex" data-no-custom-cursor>
+    <div className="min-h-screen bg-[var(--color-surface)] flex">
       {/* Desktop sidebar — hidden below tablet */}
       <div className="hidden md:flex md:w-[260px] md:flex-shrink-0">
         <div className="fixed inset-y-0 left-0 w-[260px]">

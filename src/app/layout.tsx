@@ -33,21 +33,6 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${syne.variable}`}>
       <body className="font-inter antialiased">
         {children}
-        <div id="cursor"></div>
-        <div id="cursor-glow"></div>
-        <script dangerouslySetInnerHTML={{__html: `
-          const cursor = document.getElementById('cursor');
-          const cursorGlow = document.getElementById('cursor-glow');
-          let mouseX = 0;
-          let mouseY = 0;
-          
-          document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            cursor.style.transform = \`translate(\${mouseX}px, \${mouseY}px)\`;
-            cursorGlow.style.transform = \`translate(\${mouseX}px, \${mouseY}px)\`;
-          });
-        `}} />
       </body>
     </html>
   );

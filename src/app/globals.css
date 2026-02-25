@@ -173,57 +173,6 @@
   cursor: not-allowed;
 }
 
-/* Custom cursor - disabled on auth pages */
-body {
-  cursor: none;
-  overflow-x: hidden;
-}
-
-/* Show default cursor on auth pages */
-[data-no-custom-cursor] {
-  cursor: auto;
-}
-
-[data-no-custom-cursor] #cursor,
-[data-no-custom-cursor] #cursor-glow {
-  display: none;
-}
-
-#cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 12px;
-  height: 12px;
-  background: #6366f1;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
-  mix-blend-mode: screen;
-}
-
-#cursor-glow {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 320px;
-  height: 320px;
-  background: radial-gradient(circle, rgba(99,102,241,0.07) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: transform 0.08s linear;
-}
-
-body:has(a:hover) #cursor,
-body:has(button:hover) #cursor {
-  width: 24px;
-  height: 24px;
-  background: rgba(99,102,241,0.6);
-}
 
 #bg-canvas {
   position: fixed;
@@ -1264,14 +1213,6 @@ footer {
     justify-content: center;
   }
   
-  body {
-    cursor: auto;
-  }
-  
-  #cursor,
-  #cursor-glow {
-    display: none;
-  }
 }
 
 /* ── Features page ── */
