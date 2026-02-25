@@ -1,0 +1,299 @@
+{
+  "project": {
+    "name": "OutreachAI",
+    "description": "AI-powered lead generation and outreach automation platform for agency owners",
+    "version": "1.0.0",
+    "created": "2025-02-25",
+    "last_updated": "2025-02-25"
+  },
+  "milestones": [
+    {
+      "id": "m1",
+      "name": "Foundation & MVP",
+      "target": "2025-03-15",
+      "description": "Core SaaS functionality with auth, payments, and working lead scraping"
+    },
+    {
+      "id": "m2",
+      "name": "AI Features",
+      "target": "2025-04-15",
+      "description": "Real AI email generation and website audit features"
+    },
+    {
+      "id": "m3",
+      "name": "CRM & Sequences",
+      "target": "2025-05-15",
+      "description": "Lead management, follow-up sequences, and campaign tracking"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "foundation-01",
+      "title": "Bootstrap design system tokens and constants",
+      "priority": 1,
+      "type": "non-ui",
+      "status": "pending",
+      "description": "Create the token file with all CSS variables for spacing, color, typography, shadow, radius, and motion. Create the copy constants structure. This must be complete before any UI component is built.",
+      "acceptance_criteria": [
+        "tokens.css (or equivalent) exists with all spacing, color, type, shadow, radius variables",
+        "All variables follow the naming conventions in design-system.md",
+        "copy/ directory exists with errors.ts, labels.ts, empty-states.ts, notifications.ts stubs",
+        "Design system rules file is reviewed and any project-specific overrides documented"
+      ],
+      "dependencies": [],
+      "milestone": "m1",
+      "estimated_hours": 4
+    },
+    {
+      "id": "foundation-02",
+      "title": "Build shared pattern components",
+      "priority": 2,
+      "type": "ui",
+      "status": "pending",
+      "description": "Build the four pattern components that every feature will use: EmptyState, ErrorState, LoadingState/Skeleton, ConfirmDialog, Toast/Notification. These must exist before any feature UI is built.",
+      "components_expected": ["EmptyState", "ErrorState", "LoadingState", "ConfirmDialog", "Toast"],
+      "states_required": {
+        "empty": "N/A — these ARE the state components",
+        "loading": "N/A",
+        "error": "N/A",
+        "success": "N/A"
+      },
+      "acceptance_criteria": [
+        "EmptyState: accepts title, description, optional CTA, optional icon",
+        "ErrorState: accepts title, description, onRetry, optional errorCode",
+        "LoadingState: accepts shape prop for skeleton matching",
+        "ConfirmDialog: accepts title, description, confirmLabel, cancelLabel, onConfirm, variant",
+        "Toast: accepts message, variant (success|error|warning|info), duration, optional action",
+        "All components fully accessible",
+        "All components use design system tokens exclusively",
+        "All components documented with purpose, variants, props, usage"
+      ],
+      "design_gate_required": true,
+      "dependencies": ["foundation-01"],
+      "milestone": "m1",
+      "estimated_hours": 8
+    },
+    {
+      "id": "infra-01",
+      "title": "Set up development environment and database",
+      "priority": 3,
+      "type": "non-ui",
+      "status": "pending",
+      "description": "Create Docker Compose for local Postgres, initialize Drizzle schema, set up .env.example, and configure development scripts.",
+      "acceptance_criteria": [
+        "docker-compose.yml with PostgreSQL service",
+        ".env.example with all required variables documented",
+        "Drizzle schema files created for users, subscriptions, usage_quotas, saved_leads",
+        "Migration scripts ready to run",
+        "bun run db:setup and bun run db:migrate work locally"
+      ],
+      "dependencies": [],
+      "milestone": "m1",
+      "estimated_hours": 6
+    },
+    {
+      "id": "auth-01",
+      "title": "Implement user authentication (better-auth)",
+      "priority": 4,
+      "type": "non-ui",
+      "status": "pending",
+      "description": "Set up better-auth with email/password login, session management, and middleware to protect routes.",
+      "acceptance_criteria": [
+        "better-auth configured with email/password (and optional OAuth)",
+        "Signup and login pages working",
+        "Session middleware protects /api routes and /leads page",
+        "User data stored in database",
+        "Logout functionality working"
+      ],
+      "dependencies": ["infra-01"],
+      "milestone": "m1",
+      "estimated_hours": 10
+    },
+    {
+      "id": "payment-01",
+      "title": "Integrate Stripe for subscriptions",
+      "priority": 5,
+      "type": "non-ui",
+      "status": "pending",
+      "description": "Set up Stripe Checkout, webhook handler, and subscription management with plan tiers.",
+      "acceptance_criteria": [
+        "Stripe Checkout integration for plan upgrades",
+        "Webhook handler for subscription events",
+        "User plan status stored in database",
+        "Billing portal access for plan changes",
+        "Test mode working with Stripe CLI"
+      ],
+      "dependencies": ["auth-01"],
+      "milestone": "m1",
+      "estimated_hours": 12
+    },
+    {
+      "id": "quota-01",
+      "title": "Implement usage quotas and rate limiting",
+      "priority": 6,
+      "type": "non-ui",
+      "status": "pending",
+      "description": "Create middleware to enforce plan limits on API calls and track usage per billing period.",
+      "acceptance_criteria": [
+        "Usage quota table tracks leads scraped and emails generated",
+        "Middleware checks quota before allowing API calls",
+        "Quota resets on billing period renewal",
+        "API returns 403 when quota exceeded",
+        "Usage stats displayed to user"
+      ],
+      "dependencies": ["payment-01"],
+      "milestone": "m1",
+      "estimated_hours": 8
+    },
+    {
+      "id": "leads-api-01",
+      "title": "Refactor lead scraping API with auth and quotas",
+      "priority": 7,
+      "type": "non-ui",
+      "status": "pending",
+      "description": "Update existing /api/leads route to require authentication, check quotas, and save leads to database.",
+      "acceptance_criteria": [
+        "API requires authenticated user",
+        "Quota check before scraping (deduct from user limit)",
+        "Leads saved to database with user_id",
+        "Error handling for quota exceeded",
+        "Response includes usage remaining"
+      ],
+      "dependencies": ["quota-01"],
+      "milestone": "m1",
+      "estimated_hours": 6
+    },
+    {
+      "id": "leads-ui-01",
+      "title": "Build authenticated lead finder interface",
+      "priority": 8,
+      "type": "ui",
+      "status": "pending",
+      "description": "Create new lead finder page with auth gating, usage display, and lead saving functionality.",
+      "components_expected": ["LeadFinder", "LeadTable", "SearchForm", "UsageDisplay", "SaveLeadButton"],
+      "states_required": {
+        "empty": "No searches performed yet - shows search form with usage stats",
+        "loading": "Scraping in progress - skeleton table matching loaded structure",
+        "error": "API error or quota exceeded - error state with retry/upgrade options",
+        "success": "Results displayed with save/export options"
+      },
+      "screen_hierarchy": {
+        "primary_element": "Lead results table",
+        "secondary_elements": ["Search form", "Usage stats"],
+        "supporting_elements": ["Export button", "Save buttons", "Filters"]
+      },
+      "acceptance_criteria": [
+        "Page requires authentication",
+        "Current usage and plan limits displayed",
+        "Search form with location/industry/filters",
+        "Results table with save/export functionality",
+        "Saved leads persist to database",
+        "Responsive design (mobile/tablet/desktop)",
+        "All states implemented (empty, loading, error, success)"
+      ],
+      "design_gate_required": true,
+      "dependencies": ["foundation-02", "leads-api-01"],
+      "milestone": "m1",
+      "estimated_hours": 12
+    },
+    {
+      "id": "ai-01",
+      "title": "Integrate OpenAI for email generation",
+      "priority": 9,
+      "type": "non-ui",
+      "status": "pending",
+      "description": "Create AI service to generate personalized cold emails based on lead data and user preferences.",
+      "acceptance_criteria": [
+        "OpenAI integration working with API key",
+        "Email generation endpoint accepts lead data and tone",
+        "Generated emails are personalized and professional",
+        "Error handling for API failures",
+        "Usage tracking for AI calls"
+      ],
+      "dependencies": ["quota-01"],
+      "milestone": "m2",
+      "estimated_hours": 8
+    },
+    {
+      "id": "ai-ui-01",
+      "title": "Build AI email generator interface",
+      "priority": 10,
+      "type": "ui",
+      "status": "pending",
+      "description": "Create email generation modal/interface with tone selection, preview, and copy functionality.",
+      "components_expected": ["EmailGenerator", "ToneSelector", "EmailPreview", "CopyButton"],
+      "states_required": {
+        "empty": "Lead selected but no email generated yet",
+        "loading": "AI generating email - skeleton preview",
+        "error": "Generation failed - retry option",
+        "success": "Generated email displayed with copy/export"
+      },
+      "acceptance_criteria": [
+        "Integrates with saved leads from leads-ui-01",
+        "Tone selection (direct, casual, bold)",
+        "Email preview with formatting",
+        "Copy to clipboard functionality",
+        "Regenerate option",
+        "Usage deduction on generation"
+      ],
+      "design_gate_required": true,
+      "dependencies": ["leads-ui-01", "ai-01"],
+      "milestone": "m2",
+      "estimated_hours": 10
+    },
+    {
+      "id": "dashboard-01",
+      "title": "Build user dashboard",
+      "priority": 11,
+      "type": "ui",
+      "status": "pending",
+      "description": "Create dashboard showing usage stats, saved leads, recent activity, and plan management.",
+      "components_expected": ["Dashboard", "UsageCard", "RecentLeads", "PlanCard", "ActivityFeed"],
+      "states_required": {
+        "empty": "New user - welcome state with getting started prompts",
+        "loading": "Dashboard data loading - skeleton cards",
+        "error": "Failed to load dashboard - retry option",
+        "success": "Dashboard populated with user data"
+      },
+      "acceptance_criteria": [
+        "Usage statistics (leads scraped, emails generated, quota remaining)",
+        "Recent saved leads with quick actions",
+        "Plan status and upgrade options",
+        "Activity timeline",
+        "Navigation to other features"
+      ],
+      "design_gate_required": true,
+      "dependencies": ["leads-ui-01"],
+      "milestone": "m2",
+      "estimated_hours": 12
+    },
+    {
+      "id": "testing-01",
+      "title": "Set up testing framework and write initial tests",
+      "priority": 12,
+      "type": "non-ui",
+      "status": "pending",
+      "description": "Configure Vitest for unit tests, Playwright for E2E tests, and write test coverage for core functionality.",
+      "acceptance_criteria": [
+        "Vitest configuration working",
+        "Unit tests for API routes",
+        "Unit tests for utility functions",
+        "E2E tests for critical user journeys",
+        "CI pipeline running tests",
+        "Minimum 80% code coverage on core features"
+      ],
+      "dependencies": ["leads-ui-01"],
+      "milestone": "m2",
+      "estimated_hours": 16
+    }
+  ],
+  "stats": {
+    "total_tasks": 12,
+    "completed": 0,
+    "in_progress": 0,
+    "pending": 12,
+    "ui_tasks": 4,
+    "non_ui_tasks": 8,
+    "total_estimated_hours": 112
+  }
+}
