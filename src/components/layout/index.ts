@@ -6,3 +6,4 @@ export { Sidebar } from "./Sidebar";
 export { NavLink } from "./NavLink";
 export { UserMenu } from "./UserMenu";
 export { PlanBadge } from "./PlanBadge";
+export { MobileNav } from "./MobileNav";

@@ -1,124 +1,130 @@
+/**
+ * Purpose: Displays the authenticated user's identity (name/email) with a logout action.
+ * Variants: none
+ * Props: user (name, email), onLogout, isLoading
+ * States: loading (skeleton), success (user info + logout), error (fallback label + logout)
+ * Usage: <UserMenu user={{ name: "Ali", email: "ali@test.com" }} onLogout={handleLogout} />
+ * Do not use when: user is not authenticated — component assumes auth context
+ */
 "use client";
 
-import { useSession, signOut } from "@/lib/auth-client";
+import { useState, useRef, useEffect } from "react";
+import { LogOut, ChevronUp, User } from "lucide-react";
 import { labels } from "@/copy/labels";
-import { PlanBadge } from "./PlanBadge";
-import { SubscriptionTier } from "@/db/schema/subscriptions";
-import { Button } from "@/components/ui";
-import { useState } from "react";
 
 interface UserMenuProps {
-  tier?: SubscriptionTier;
+  user?: { name?: string | null; email?: string | null } | null;
+  isLoading?: boolean;
+  onLogout: () => void;
 }
 
-export function UserMenu({ tier = "starter" }: UserMenuProps) {
-  const { data: session, isPending } = useSession();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+export function UserMenu({ user, isLoading, onLogout }: UserMenuProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
-    await signOut();
-  };
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setIsOpen(false);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
 
-  if (isPending) {
+  if (isLoading) {
     return (
-      <div className="flex flex-col gap-3 p-4 border-t" style={{ borderColor: "var(--color-border)" }}>
-        <div className="flex items-center gap-3">
-          <div
-            className="w-10 h-10 rounded-full animate-pulse"
-            style={{ backgroundColor: "var(--color-neutral-800)" }}
-          />
-          <div className="flex-1 space-y-2">
-            <div
-              className="h-4 w-24 rounded animate-pulse"
-              style={{ backgroundColor: "var(--color-neutral-800)" }}
-            />
-            <div
-              className="h-3 w-32 rounded animate-pulse"
-              style={{ backgroundColor: "var(--color-neutral-800)" }}
-            />
-          </div>
+      <div className="flex items-center gap-[var(--space-3)] px-[var(--space-3)] py-[var(--space-2)]">
+        <div className="w-8 h-8 rounded-full bg-[var(--color-neutral-800)] animate-pulse" />
+        <div className="flex flex-col gap-1">
+          <div className="w-20 h-3 rounded bg-[var(--color-neutral-800)] animate-pulse" />
+          <div className="w-28 h-2.5 rounded bg-[var(--color-neutral-800)] animate-pulse" />
         </div>
       </div>
     );
   }
 
-  if (!session?.user) {
-    return (
-      <div className="flex flex-col gap-3 p-4 border-t" style={{ borderColor: "var(--color-border)" }}>
-        <div className="flex items-center gap-3">
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: "var(--color-neutral-800)", color: "var(--color-neutral-400)" }}
-          >
-            ?
-          </div>
-          <div className="flex-1">
-            <p style={{ fontSize: "var(--text-sm)", color: "var(--color-neutral-400)" }}>
-              Session error
-            </p>
-          </div>
-        </div>
-        <Button variant="secondary" size="sm" onClick={handleLogout} disabled={isLoggingOut}>
-          {labels.auth.logout}
-        </Button>
-      </div>
-    );
-  }
-
-  const initials = session.user.name
-    ? session.user.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
-    : session.user.email?.[0]?.toUpperCase() || "U";
+  const displayName = user?.name || user?.email?.split("@")[0] || "Account";
+  const displayEmail = user?.email || "";
+  const initials = displayName.slice(0, 2).toUpperCase();
 
   return (
-    <div className="flex flex-col gap-3 p-4 border-t" style={{ borderColor: "var(--color-border)" }}>
-      <div className="flex items-center gap-3">
-        <div
-          className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
-          style={{
-            backgroundColor: "var(--color-primary-subtle)",
-            color: "var(--color-primary)",
-            fontSize: "var(--text-sm)",
-            fontWeight: 600,
-          }}
-        >
+    <div ref={menuRef} className="relative">
+      <button
+        onClick={() => setIsOpen((prev) => !prev)}
+        className={`
+          w-full flex items-center gap-[var(--space-3)] px-[var(--space-3)] py-[var(--space-2)]
+          rounded-[var(--radius-md)] text-left
+          transition-colors duration-150
+          hover:bg-[var(--color-surface-overlay)]
+          outline-none
+          focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]
+        `}
+        aria-label={labels.shell.userMenuLabel}
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+      >
+        <span className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary-hover)] flex items-center justify-center text-[var(--text-caption)] font-semibold text-white">
           {initials}
-        </div>
-        <div className="flex-1 min-w-0">
-          {session.user.name && (
-            <p
-              className="truncate"
-              style={{
-                fontSize: "var(--text-base)",
-                fontWeight: 500,
-                color: "var(--color-neutral-100)",
-              }}
-            >
-              {session.user.name}
-            </p>
+        </span>
+        <span className="flex-1 min-w-0">
+          <span className="block text-[var(--text-sm)] font-medium text-[var(--color-neutral-100)] truncate">
+            {displayName}
+          </span>
+          {displayEmail && (
+            <span className="block text-[var(--text-caption)] text-[var(--color-neutral-500)] truncate">
+              {displayEmail}
+            </span>
           )}
-          <p
-            className="truncate"
-            style={{
-              fontSize: "var(--text-sm)",
-              color: "var(--color-neutral-400)",
+        </span>
+        <ChevronUp
+          size={16}
+          className={`
+            flex-shrink-0 text-[var(--color-neutral-500)]
+            transition-transform duration-150
+            ${isOpen ? "rotate-0" : "rotate-180"}
+          `}
+        />
+      </button>
+
+      {isOpen && (
+        <div
+          className="
+            absolute bottom-full left-0 right-0 mb-[var(--space-2)]
+            bg-[var(--color-surface-raised)] border border-[var(--color-border)]
+            rounded-[var(--radius-lg)] shadow-[var(--shadow-lg)]
+            py-[var(--space-1)] overflow-hidden
+            animate-modal-in
+          "
+          role="menu"
+        >
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              onLogout();
             }}
+            className="
+              w-full flex items-center gap-[var(--space-3)] px-[var(--space-4)] py-[var(--space-2)]
+              text-[var(--text-sm)] text-[var(--color-neutral-400)]
+              hover:bg-[var(--color-surface-overlay)] hover:text-[var(--color-error)]
+              transition-colors duration-150
+              outline-none
+              focus-visible:bg-[var(--color-surface-overlay)] focus-visible:text-[var(--color-error)]
+            "
+            role="menuitem"
           >
-            {session.user.email}
-          </p>
+            <LogOut size={16} />
+            <span>{labels.auth.logout}</span>
+          </button>
         </div>
-      </div>
-      <div className="flex items-center justify-between gap-2">
-        <PlanBadge tier={tier} />
-        <Button variant="ghost" size="sm" onClick={handleLogout} disabled={isLoggingOut}>
-          {labels.auth.logout}
-        </Button>
-      </div>
+      )}
     </div>
   );
 }

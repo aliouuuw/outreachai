@@ -1,147 +1,104 @@
+/**
+ * Purpose: Persistent vertical navigation sidebar for the authenticated app shell.
+ * Variants: none (single variant, responsive via parent)
+ * Props: user, tier, isLoading, onLogout
+ * States: loading (skeleton nav + user), error (minimal with logout), success (full nav)
+ * Usage: <Sidebar user={session.user} tier="pro" isLoading={isPending} onLogout={handleLogout} />
+ * Do not use when: on public/marketing pages — this is for authenticated routes only
+ */
 "use client";
 
+import { usePathname } from "next/navigation";
+import {
+  LayoutDashboard,
+  Search,
+  Bookmark,
+  Settings,
+  CreditCard,
+} from "lucide-react";
+import { labels } from "@/copy/labels";
 import { NavLink } from "./NavLink";
 import { UserMenu } from "./UserMenu";
-import { labels } from "@/copy/labels";
-import { SubscriptionTier } from "@/db/schema/subscriptions";
-import { useState, useEffect } from "react";
+import { PlanBadge } from "./PlanBadge";
+
+type SubscriptionTier = "starter" | "pro" | "agency";
 
 interface SidebarProps {
-  tier?: SubscriptionTier;
+  user?: { name?: string | null; email?: string | null } | null;
+  tier?: SubscriptionTier | null;
   isLoading?: boolean;
+  onLogout: () => void;
+  onNavigate?: () => void;
 }
 
-export function Sidebar({ tier = "starter", isLoading }: SidebarProps) {
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+const NAV_ITEMS = [
+  { href: "/dashboard", icon: <LayoutDashboard size={20} />, label: labels.nav.dashboard },
+  { href: "/leads", icon: <Search size={20} />, label: labels.nav.leadFinder },
+  { href: "/saved-leads", icon: <Bookmark size={20} />, label: labels.nav.savedLeads },
+  { href: "/settings", icon: <Settings size={20} />, label: labels.nav.settings },
+  { href: "/billing", icon: <CreditCard size={20} />, label: labels.nav.billing },
+] as const;
 
-  useEffect(() => {
-    if (isMobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isMobileOpen]);
+const SKELETON_NAV_ITEMS_COUNT = 5;
 
-  const navItems = [
-    { href: "/dashboard", label: labels.nav.dashboard, icon: "📊" },
-    { href: "/leads", label: labels.nav.leadFinder, icon: "🔍" },
-    { href: "/saved-leads", label: labels.nav.savedLeads, icon: "💾" },
-    { href: "/settings", label: labels.nav.settings, icon: "⚙️" },
-    { href: "/billing", label: labels.nav.billing, icon: "💳" },
-  ];
-
-  const sidebarContent = (
-    <div
-      className="flex flex-col h-full"
-      style={{ backgroundColor: "var(--color-surface-raised)" }}
-    >
-      <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: "var(--color-border)" }}>
-        <h1
-          style={{
-            fontSize: "var(--text-h3)",
-            fontWeight: 700,
-            color: "var(--color-neutral-100)",
-          }}
-        >
-          OutreachAI
-        </h1>
-        <button
-          onClick={() => setIsMobileOpen(false)}
-          className="md:hidden p-2 rounded-lg hover:bg-[var(--color-surface-overlay)] transition-colors"
-          style={{ color: "var(--color-neutral-300)" }}
-          aria-label={labels.nav.closeMenu}
-        >
-          ✕
-        </button>
-      </div>
-
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        {isLoading ? (
-          <>
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div
-                key={i}
-                className="h-12 rounded-lg animate-pulse"
-                style={{ backgroundColor: "var(--color-neutral-800)" }}
-              />
-            ))}
-          </>
-        ) : (
-          navItems.map((item) => (
-            <NavLink
-              key={item.href}
-              href={item.href}
-              icon={<span>{item.icon}</span>}
-              onClick={() => setIsMobileOpen(false)}
-            >
-              {item.label}
-            </NavLink>
-          ))
-        )}
-      </nav>
-
-      <UserMenu tier={tier} />
-    </div>
-  );
+export function Sidebar({
+  user,
+  tier,
+  isLoading,
+  onLogout,
+  onNavigate,
+}: SidebarProps) {
+  const pathname = usePathname();
 
   return (
-    <>
-      <button
-        onClick={() => setIsMobileOpen(true)}
-        className="md:hidden fixed top-4 left-4 z-40 p-3 rounded-lg shadow-lg"
-        style={{
-          backgroundColor: "var(--color-surface-raised)",
-          color: "var(--color-neutral-100)",
-          boxShadow: "var(--shadow-md)",
-        }}
-        aria-label={labels.nav.menu}
-      >
-        ☰
-      </button>
+    <aside
+      className="
+        flex flex-col h-full
+        bg-[var(--color-surface-raised)]
+        border-r border-[var(--color-border)]
+      "
+    >
+      {/* Logo / Brand */}
+      <div className="flex items-center gap-[var(--space-3)] px-[var(--space-4)] py-[var(--space-6)]">
+        <span className="text-[var(--text-h4)] font-bold bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-hover)] bg-clip-text text-transparent">
+          {labels.shell.appName}
+        </span>
+        <PlanBadge tier={tier} isLoading={isLoading} />
+      </div>
 
-      <aside
-        className="hidden md:flex md:flex-col md:w-64 border-r"
-        style={{
-          borderColor: "var(--color-border)",
-          backgroundColor: "var(--color-surface-raised)",
-        }}
-      >
-        {sidebarContent}
-      </aside>
+      {/* Navigation */}
+      <nav className="flex-1 px-[var(--space-3)] py-[var(--space-2)]" aria-label="Main navigation">
+        <ul className="flex flex-col gap-[var(--space-1)]" role="list">
+          {isLoading
+            ? Array.from({ length: SKELETON_NAV_ITEMS_COUNT }).map((_, i) => (
+                <li key={i}>
+                  <div className="flex items-center gap-[var(--space-3)] px-[var(--space-3)] py-[var(--space-2)]">
+                    <div className="w-5 h-5 rounded bg-[var(--color-neutral-800)] animate-pulse" />
+                    <div
+                      className="h-3.5 rounded bg-[var(--color-neutral-800)] animate-pulse"
+                      style={{ width: `${60 + i * 12}px` }}
+                    />
+                  </div>
+                </li>
+              ))
+            : NAV_ITEMS.map((item) => (
+                <li key={item.href}>
+                  <NavLink
+                    href={item.href}
+                    icon={item.icon}
+                    label={item.label}
+                    isActive={pathname.startsWith(item.href)}
+                    onClick={onNavigate}
+                  />
+                </li>
+              ))}
+        </ul>
+      </nav>
 
-      {isMobileOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/50 z-40 md:hidden"
-            onClick={() => setIsMobileOpen(false)}
-            style={{ transition: "opacity 150ms ease-in" }}
-          />
-          <aside
-            className="fixed inset-y-0 left-0 w-64 z-50 md:hidden"
-            style={{
-              backgroundColor: "var(--color-surface-raised)",
-              boxShadow: "var(--shadow-xl)",
-              animation: "slideInFromLeft 200ms ease-out",
-            }}
-          >
-            {sidebarContent}
-          </aside>
-        </>
-      )}
-
-      <style jsx>{`
-        @keyframes slideInFromLeft {
-          from {
-            transform: translateX(-100%);
-          }
-          to {
-            transform: translateX(0);
-          }
-        }
-      `}</style>
-    </>
+      {/* User menu at bottom */}
+      <div className="border-t border-[var(--color-border)] px-[var(--space-3)] py-[var(--space-3)]">
+        <UserMenu user={user} isLoading={isLoading} onLogout={onLogout} />
+      </div>
+    </aside>
   );
 }

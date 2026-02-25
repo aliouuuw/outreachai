@@ -1,23 +1,13 @@
+import { labels } from "@/copy/labels";
+
 export default function BillingPage() {
   return (
     <div>
-      <h1
-        style={{
-          fontSize: "var(--text-h1)",
-          fontWeight: 700,
-          color: "var(--color-neutral-50)",
-        }}
-      >
-        Billing
+      <h1 className="text-[var(--text-h2)] font-bold text-[var(--color-neutral-50)] mb-[var(--space-2)]">
+        {labels.nav.billing}
       </h1>
-      <p
-        style={{
-          fontSize: "var(--text-base)",
-          color: "var(--color-neutral-400)",
-          marginTop: "var(--space-2)",
-        }}
-      >
-        Manage your subscription and billing
+      <p className="text-[var(--text-base)] text-[var(--color-neutral-400)]">
+        Your billing information will appear here.
       </p>
     </div>
   );

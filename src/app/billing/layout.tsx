@@ -1,6 +1,9 @@
-import { ReactNode } from "react";
-import { AppShell } from "@/components/layout";
+import { AppShell } from "@/components/layout/AppShell";
 
-export default function BillingLayout({ children }: { children: ReactNode }) {
+export default function BillingLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return <AppShell>{children}</AppShell>;
 }

@@ -254,69 +254,73 @@ Email verification, password reset, and logout UX flows. Users can now verify th
 
 ### app-shell-01 — Design Gate
 
-**User mental model:** The user thinks they're working inside a business tool and need to move between lead finding, their saved leads, settings, and billing. They expect a navigation that stays visible while they work, clearly shows which section they're in, and gives them quick access to their account info and subscription details. On mobile, they expect the same navigation to be accessible via a menu button without losing their place.
+**User mental model:** The user thinks they're working inside a business tool and need to move between lead finding, saved leads, settings, and billing. They expect a navigation that stays visible while they work, clearly shows which section they're in, and gives them quick access to their account info and subscription details. On mobile, they expect the same navigation via a menu button.
 
 **New components:** AppShell, Sidebar, NavLink, UserMenu, PlanBadge, MobileNav
-
-**Existing components extended:** None (using Button, Modal as-is)
-
-**States documented:** Yes — all states for loading, error, success, and interactive states documented
-
+**Existing components extended:** None (using Button, Modal, ErrorState as-is)
+**States documented:** Yes — loading (skeleton sidebar + user menu), error (ErrorState with retry + logout), success (full nav with active route highlight)
 **Hierarchy decision:** Sidebar is primary (persistent), navigation links are primary within sidebar, user identity is primary in user menu
-
 **Design system gaps flagged:** None
-
 **Assumptions flagged:**
-1. Session data available from auth context (validated — auth-client exists)
-2. 5 nav links fit in sidebar (acceptable for MVP)
-3. Plan badge placement in sidebar (accepted)
+- Session data available from better-auth `useSession` hook
+- 5 nav links fit in sidebar (acceptable for MVP)
+- Plan badge hardcoded to "starter" until subscription data is wired
 
-**Gate status:** ✅ Ready to implement
+**Gate status:** Ready → Implemented
+
+---
 
 ### app-shell-01 — Implementation
 
 **Status:** Complete
-**Time:** ~2h
+**Time:** ~1.5h
 
 **What was built:**
-Full authenticated app shell with persistent sidebar navigation, user menu with session data, plan badge, and responsive mobile navigation. All authenticated routes now share a consistent layout with clear navigation and user context.
+Persistent authenticated layout shell with desktop sidebar, mobile hamburger nav, user menu with logout, plan badge, and active route highlighting. All authenticated routes (`/dashboard`, `/leads`, `/saved-leads`, `/settings`, `/billing`) now render inside the AppShell. Also migrated `middleware.ts` → `proxy.ts` per Next.js 16 deprecation.
+
+**States implemented:** loading (skeleton sidebar + user shimmer) | error (ErrorState with retry + logout) | success (full nav with active highlights)
 
 **Components created:**
-- `AppShell` — Main layout wrapper that combines sidebar and content area
-- `Sidebar` — Persistent navigation with desktop/mobile variants
-- `NavLink` — Route link component with active state detection via usePathname
-- `UserMenu` — User identity display with avatar/initials, name, email, plan badge, and logout
-- `PlanBadge` — Subscription tier indicator with color-coded variants (starter/pro/agency)
+- `src/components/layout/AppShell.tsx` — authenticated layout wrapper
+- `src/components/layout/Sidebar.tsx` — vertical nav with logo, nav links, user menu
+- `src/components/layout/NavLink.tsx` — route link with active state + icon
+- `src/components/layout/UserMenu.tsx` — user identity + logout dropdown
+- `src/components/layout/PlanBadge.tsx` — subscription tier pill badge
+- `src/components/layout/MobileNav.tsx` — slide-in mobile nav overlay
 
-**States implemented:** loading | error | success
+**Components extended:** None
+
+**Other changes:**
+- `src/middleware.ts` → `src/proxy.ts` (Next.js 16 `middleware` → `proxy` convention)
+- `src/proxy.ts` — added `/saved-leads` and `/billing` to protected paths
+- `src/copy/labels.ts` — added `nav` and `shell` sections
+- `src/app/dashboard/layout.tsx` — wraps pages in AppShell
+- `src/app/leads/layout.tsx` — wraps pages in AppShell
+- `src/app/saved-leads/layout.tsx` + `page.tsx` — stub
+- `src/app/settings/layout.tsx` + `page.tsx` — stub
+- `src/app/billing/layout.tsx` + `page.tsx` — stub
+- `src/app/dashboard/page.tsx` — simplified (logout moved to AppShell)
 
 **Design decisions:**
-- NavLink uses `usePathname` for active route detection — matches exact path or path prefix
-- Active state indicated via left border + primary color background + bold text
-- Mobile nav uses fixed overlay with slide-in animation (200ms ease-out) and backdrop blur
-- Hamburger menu button positioned fixed top-left on mobile, hidden on desktop (md breakpoint)
-- User menu shows loading skeleton while session loads, error state with logout-only option if session fails
-- Plan badge uses semantic colors: neutral for starter, primary for pro, warning for agency
-- AppShell layouts created for all authenticated routes: /dashboard, /leads, /saved-leads, /settings, /billing
-- Middleware updated to protect /saved-leads and /billing routes
+- Decision: Individual layout.tsx per route directory rather than a `(app)` route group
+  Alternatives considered: Route group `(app)` with shared layout
+  Reason: Avoids moving existing files; each layout is a single-line wrapper; can consolidate later
+  Consequences: Minor duplication (6 identical layout files); easy to refactor into route group when needed
+
+- Decision: Plan badge hardcoded to "starter" tier
+  Alternatives considered: Fetch subscription from API
+  Reason: Subscription API exists but no client-side hook is wired yet; will be connected in payment-ui-01
+  Consequences: Badge always shows "Starter" until payment UI task is implemented
+
+- Decision: Migrated middleware.ts → proxy.ts
+  Alternatives considered: Keep middleware.ts and suppress warning
+  Reason: Next.js 16.1.6 deprecates the `middleware` convention in favor of `proxy`
+  Consequences: Must use `proxy` function name going forward
 
 **Assumptions made:**
-- Session data from `useSession()` hook provides user.name, user.email reliably
-- Subscription tier defaults to "starter" if not provided (acceptable for MVP before payment-ui-01)
-- Mobile nav body scroll lock via `document.body.style.overflow = "hidden"` is sufficient (no need for scroll-lock library yet)
+- better-auth `useSession()` returns `{ data: { user: { name, email } }, isPending, error }`
+- Custom cursor is disabled in authenticated pages via `data-no-custom-cursor` attribute
 
-**Design Gate:** Completed — all components, states, and hierarchy decisions documented before implementation
-
-**UI QA:** Pass
-- ✅ All interactive states implemented (default, hover, active, focus, disabled)
-- ✅ All data states implemented (loading, error, success)
-- ✅ Keyboard navigation works (Tab, Enter, Escape)
-- ✅ Focus states visible on all interactive elements
-- ✅ Mobile responsive (hamburger menu, overlay, slide animation)
-- ✅ Active route highlighting works correctly
-- ✅ Logout action present and functional
-- ✅ All spacing uses design system tokens
-- ✅ All colors use design system tokens
-- ✅ All typography uses design system scale
+**UI QA:** Pass — all states implemented (loading skeleton, error with retry/logout, success with active routes); responsive (mobile hamburger → slide-in nav); keyboard accessible (focus rings, escape to close, tab navigation); accessible (ARIA labels, roles, landmarks)
 
 **Type-check:** Pass (`tsc --noEmit` returns exit code 0)
