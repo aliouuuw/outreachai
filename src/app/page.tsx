@@ -251,7 +251,8 @@ export default function Home() {
           <li><a href="#features">Features</a></li>
           <li><a href="#how">How it Works</a></li>
           <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#" className="nav-cta">Get Started</a></li>
+          <li><Link href="/login">Sign in</Link></li>
+          <li><Link href="/signup" className="nav-cta">Get Started</Link></li>
         </ul>
       </nav>
 
@@ -266,7 +267,7 @@ export default function Home() {
         </h1>
         <p className="hero-animate">OutreachAI writes hyper-personalized cold emails, DMs, and follow-up sequences so you can focus on delivering — not prospecting.</p>
         <div className="hero-actions hero-animate">
-          <a href="#" className="btn-primary">Start for Free →</a>
+          <Link href="/signup" className="btn-primary">Start for Free →</Link>
           <a href="#how" className="btn-secondary">See How It Works</a>
         </div>
         <div className="hero-meta hero-animate">
@@ -417,14 +418,14 @@ export default function Home() {
             <div className="pricing-price">$0 <span>/ mo</span></div>
             <div className="pricing-desc">Perfect for freelancers just getting started.</div>
             <ul className="pricing-features"><li>25 AI-generated messages/month</li><li>Cold email generator</li><li>Basic icebreakers</li><li>1 active sequence</li></ul>
-            <a href="#" className="btn-plan btn-plan-outline">Get Started Free</a>
+            <Link href="/signup" className="btn-plan btn-plan-outline">Get Started Free</Link>
           </div>
           <div className="pricing-card featured fade-up" data-delay="2">
             <div className="pricing-name">Pro</div>
             <div className="pricing-price">$49 <span>/ mo</span></div>
             <div className="pricing-desc">For agencies ready to scale outreach fast.</div>
             <ul className="pricing-features"><li>Unlimited AI messages</li><li>All message types (email, DM, call)</li><li>Full sequence builder</li><li>Outreach CRM included</li><li>Priority support</li></ul>
-            <a href="#" className="btn-plan btn-plan-filled">Start Pro Free</a>
+            <Link href="/signup" className="btn-plan btn-plan-filled">Start Pro Free</Link>
           </div>
           <div className="pricing-card fade-up" data-delay="3">
             <div className="pricing-name">Agency</div>
@@ -465,7 +466,7 @@ export default function Home() {
         <h2 className="fade-up">Ready to fill your calendar<br /><span>with qualified leads?</span></h2>
         <p className="fade-up" data-delay="1">Join thousands of agencies and freelancers already using OutreachAI.</p>
         <div className="fade-up" data-delay="2">
-          <a href="#" className="btn-primary">Start for Free — No Card Needed →</a>
+          <Link href="/signup" className="btn-primary">Start for Free — No Card Needed →</Link>
         </div>
       </section>
 
