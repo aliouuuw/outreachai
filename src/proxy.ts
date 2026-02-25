@@ -1,23 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "./lib/auth";
 
 const PROTECTED_PATHS = ["/leads", "/dashboard", "/settings", "/saved-leads", "/billing"];
 const AUTH_PATHS = ["/login", "/signup", "/forgot-password", "/reset-password"];
-
-const AUTH_COOKIE_NAMES = [
-  "better-auth.session_token",
-  "better-auth.session-token",
-  "better-auth.session",
-  "session_token",
-  "session-token",
-  "session",
-];
-
-function hasAuthCookie(request: NextRequest) {
-  return AUTH_COOKIE_NAMES.some((name) => {
-    const value = request.cookies.get(name)?.value;
-    return Boolean(value);
-  });
-}
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -29,7 +14,16 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const isAuthed = hasAuthCookie(request);
+  // Check for valid session using better-auth
+  let isAuthed = false;
+  try {
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    });
+    isAuthed = !!session;
+  } catch {
+    isAuthed = false;
+  }
 
   if (isProtectedPath && !isAuthed) {
     const loginUrl = new URL("/login", request.url);
