@@ -41,7 +41,7 @@ export default function ForgotPasswordPage() {
 
   if (isSuccess) {
     return (
-      <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden flex items-center justify-center px-4">
+      <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden flex items-center justify-center px-4" data-no-custom-cursor>
         {/* Animated gradient orbs */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
@@ -69,16 +69,16 @@ export default function ForgotPasswordPage() {
               </div>
             </div>
             <h1 className="text-2xl font-bold text-white mb-2">
-              Email envoyé
+              Email sent
             </h1>
             <p className="text-slate-400 mb-6">
-              Si un compte existe avec <span className="text-slate-300 font-medium">{email}</span>, vous recevrez un lien pour réinitialiser votre mot de passe.
+              If an account exists with <span className="text-slate-300 font-medium">{email}</span>, you'll receive a link to reset your password.
             </p>
             <Link
               href="/login"
               className="inline-block px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all duration-200 shadow-lg hover:shadow-indigo-500/25"
             >
-              Retour à la connexion
+              Back to sign in
             </Link>
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden flex items-center justify-center px-4">
+    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden flex items-center justify-center px-4" data-no-custom-cursor>
       {/* Animated gradient orbs */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>
@@ -103,17 +103,17 @@ export default function ForgotPasswordPage() {
 
       <div className="relative w-full max-w-md">
         {/* Header */}
-        <div className="mb-10 text-center">
-          <Link href="/" className="inline-block mb-6">
+        <div className="mb-12 text-center">
+          <Link href="/" className="inline-block mb-8">
             <span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
               OutreachAI
             </span>
           </Link>
           <h1 className="text-4xl font-bold text-white mb-3">
-            Mot de passe oublié ?
+            Forgot password?
           </h1>
           <p className="text-slate-400 text-base">
-            Entrez votre email pour recevoir un lien de réinitialisation
+            Enter your email to receive a reset link
           </p>
         </div>
 
@@ -128,9 +128,9 @@ export default function ForgotPasswordPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
+          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
             {/* Email Field */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5">
               <label htmlFor="email" className="text-sm font-medium text-slate-300">
                 Email
               </label>
@@ -138,7 +138,7 @@ export default function ForgotPasswordPage() {
                 id="email"
                 type="email"
                 autoComplete="email"
-                placeholder="vous@exemple.com"
+                placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -151,27 +151,27 @@ export default function ForgotPasswordPage() {
             <button
               type="submit"
               disabled={isLoading || !email}
-              className="w-full mt-2 px-6 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-indigo-500/25"
+              className="w-full mt-4 px-6 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-indigo-500/25"
             >
-              {isLoading ? "Envoi…" : "Envoyer le lien"}
+              {isLoading ? "Sending…" : "Send reset link"}
             </button>
           </form>
 
           {/* Divider */}
           <div className="my-6 flex items-center gap-3">
             <div className="flex-1 h-px bg-white/10"></div>
-            <span className="text-xs text-slate-500">ou</span>
+            <span className="text-xs text-slate-500">or</span>
             <div className="flex-1 h-px bg-white/10"></div>
           </div>
 
           {/* Back to Login Link */}
           <p className="text-center text-sm text-slate-400">
-            Vous vous souvenez de votre mot de passe ?{" "}
+            Remember your password?{" "}
             <Link
               href="/login"
               className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors duration-150"
             >
-              Se connecter
+              Sign in
             </Link>
           </p>
         </div>

@@ -85,16 +85,16 @@ function ResetPasswordForm() {
           </div>
         </div>
         <h1 className="text-2xl font-bold text-white mb-2">
-          Mot de passe réinitialisé
+          Password reset
         </h1>
         <p className="text-slate-400 mb-6">
-          Votre mot de passe a été mis à jour avec succès.
+          Your password has been updated successfully.
         </p>
         <button
           onClick={() => router.push("/login")}
           className="inline-block px-6 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all duration-200 shadow-lg hover:shadow-indigo-500/25"
         >
-          Se connecter
+          Sign in
         </button>
       </div>
     );
@@ -111,10 +111,10 @@ function ResetPasswordForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2.5">
           <label htmlFor="password" className="text-sm font-medium text-slate-300">
-            Nouveau mot de passe
+            New password
           </label>
           <input
             id="password"
@@ -130,9 +130,9 @@ function ResetPasswordForm() {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2.5">
           <label htmlFor="confirmPassword" className="text-sm font-medium text-slate-300">
-            Confirmer le mot de passe
+            Confirm password
           </label>
           <input
             id="confirmPassword"
@@ -151,15 +151,15 @@ function ResetPasswordForm() {
         <button
           type="submit"
           disabled={isLoading || !token || !password || !confirmPassword}
-          className="w-full mt-2 px-6 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-indigo-500/25"
+          className="w-full mt-4 px-6 py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-indigo-500/25"
         >
-          {isLoading ? "Réinitialisation…" : "Réinitialiser le mot de passe"}
+          {isLoading ? "Resetting…" : "Reset password"}
         </button>
       </form>
 
       <div className="my-6 flex items-center gap-3">
         <div className="flex-1 h-px bg-white/10"></div>
-        <span className="text-xs text-slate-500">ou</span>
+        <span className="text-xs text-slate-500">or</span>
         <div className="flex-1 h-px bg-white/10"></div>
       </div>
 
@@ -168,7 +168,7 @@ function ResetPasswordForm() {
           href="/login"
           className="text-indigo-400 hover:text-indigo-300 font-semibold transition-colors duration-150"
         >
-          Retour à la connexion
+          Back to sign in
         </Link>
       </p>
     </div>
@@ -177,7 +177,7 @@ function ResetPasswordForm() {
 
 export default function ResetPasswordPage() {
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden flex items-center justify-center px-4">
+    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 overflow-hidden flex items-center justify-center px-4" data-no-custom-cursor>
       {/* Animated gradient orbs */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }}></div>

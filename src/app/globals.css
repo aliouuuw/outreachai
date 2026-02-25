@@ -80,10 +80,20 @@ h1, h2, h3, h4, h5, h6 {
   animation: modalIn 0.2s cubic-bezier(.22,.68,0,1) forwards;
 }
 
-/* Custom cursor */
+/* Custom cursor - disabled on auth pages */
 body {
   cursor: none;
   overflow-x: hidden;
+}
+
+/* Show default cursor on auth pages */
+[data-no-custom-cursor] {
+  cursor: auto;
+}
+
+[data-no-custom-cursor] #cursor,
+[data-no-custom-cursor] #cursor-glow {
+  display: none;
 }
 
 #cursor {
