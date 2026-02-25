@@ -123,7 +123,7 @@
 - Implemented (committed): foundation-01, foundation-02, infra-01, auth-01, payment-01, quota-01
 - Current implementation includes: auth routes + middleware, Stripe checkout/portal/webhook, quota system, quota-gated /api/leads
 
-**Next task:** auth-02 (Harden auth: email verification, password reset, logout UX)
+**Next task:** app-shell-01 (Add authenticated layout shell + navigation) or auth-02 follow-up (email provider + verification in production)
 
 **Bypass sign-off:** —
 **Bypass reason:** —

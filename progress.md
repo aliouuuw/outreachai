@@ -14,12 +14,26 @@
   - Expanded `prd.json` into a comprehensive backlog with normalized story contract fields (`epic`, `persona`, `user_story`, `out_of_scope`, `definition_of_done`)
   - Updated `sdlc-state.md` to reflect current stage progress and next task
 
+- Fixed Tailwind utility overrides caused by an unlayered global `* { padding: 0; }` reset by moving base resets into `@layer base` in `src/app/globals.css`.
+- Refined login/signup UI spacing and readability now that Tailwind utilities apply correctly.
+- Improved better-auth + Drizzle DX for Neon:
+  - `drizzle.config.ts` now loads `DATABASE_URL` from `.env.local` for CLI runs and fails fast if missing (prevents accidental localhost migrations).
+  - Added the missing better-auth session `token` field to `sessions` schema and generated/applied a migration.
+- Updated Next middleware route protection to avoid DB-backed session lookups in Edge runtime; middleware now uses auth-cookie presence checks for redirects.
+- Restored visible cursor on authenticated pages by rendering custom cursor DOM nodes in `src/app/layout.tsx`.
+- Converted French error copy in `src/copy/errors.ts` (and dashboard welcome text) back to English.
+
 ### Decisions
 
 Decision: Use `src/app/tokens.css` as the canonical design token source and bridge existing Tailwind `@theme` variables to these tokens.
 Alternatives considered: Keep the existing ad-hoc `@theme` tokens in `globals.css`, or fully migrate all existing CSS to the new token names immediately.
 Reason: Keeps a single token source of truth while minimizing churn in the current marketing-page CSS.
 Consequences: Future UI components should use the canonical token names directly; legacy `--color-*` aliases may be removed later once the old styles are migrated.
+
+Decision: Avoid database-backed session validation inside Next.js `middleware` (Edge runtime).
+Alternatives considered: Continue calling `auth.api.getSession` in middleware; implement JWT decoding in middleware.
+Reason: Edge runtime + Postgres client usage caused intermittent INTERNAL_SERVER_ERROR and session lookup failures; cookie presence checks are sufficient for redirect gating.
+Consequences: Protected server routes/pages must validate the session in the Node runtime (API routes / server actions) for authoritative access control.
 
 ### foundation-02 — Design Gate
 

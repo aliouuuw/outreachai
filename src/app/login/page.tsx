@@ -59,16 +59,16 @@ export default function LoginPage() {
 
       <div className="relative w-full max-w-md">
         {/* Header */}
-        <div className="mb-12 text-center">
-          <Link href="/" className="inline-block mb-8">
+        <div className="mb-10 text-center space-y-2">
+          <Link href="/" className="inline-block mb-6">
             <span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
               OutreachAI
             </span>
           </Link>
-          <h1 className="text-4xl font-bold text-white mb-3">
+          <h1 className="text-4xl font-bold text-white">
             Welcome back
           </h1>
-          <p className="text-slate-400 text-base">
+          <p className="text-slate-300 text-base">
             Sign in to your account to continue
           </p>
         </div>
@@ -99,7 +99,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={isLoading}
-                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-200 disabled:opacity-50"
+                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/30 focus:bg-white/15 transition-all duration-200 disabled:opacity-50"
               />
             </div>
 
@@ -111,21 +111,21 @@ export default function LoginPage() {
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition-colors duration-150"
+                  className="text-sm text-indigo-400 hover:text-indigo-300 font-medium transition-colors duration-150"
                 >
-                  Forgot?
+                  Forgot password?
                 </Link>
               </div>
               <input
                 id="password"
                 type="password"
                 autoComplete="current-password"
-                placeholder="••••••••"
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
-                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all duration-200 disabled:opacity-50"
+                className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/30 focus:bg-white/15 transition-all duration-200 disabled:opacity-50"
               />
             </div>
 
@@ -147,7 +147,7 @@ export default function LoginPage() {
           </div>
 
           {/* Sign Up Link */}
-          <p className="text-center text-sm text-slate-400">
+          <p className="text-center text-sm text-slate-300 mt-4">
             Don't have an account?{" "}
             <Link
               href="/signup"
@@ -159,10 +159,10 @@ export default function LoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-500 mt-6">
+        <p className="text-center text-xs text-slate-400 mt-8">
           By continuing, you agree to our{" "}
           <Link href="#" className="text-indigo-400 hover:text-indigo-300">
-            terms of service
+            Terms of Service
           </Link>
         </p>
       </div>

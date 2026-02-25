@@ -1,8 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionFromRequest } from "@/lib/auth-middleware";
 
 const PROTECTED_PATHS = ["/leads", "/dashboard", "/settings"];
 const AUTH_PATHS = ["/login", "/signup", "/forgot-password", "/reset-password"];
+
+const AUTH_COOKIE_NAMES = [
+  "better-auth.session_token",
+  "better-auth.session-token",
+  "better-auth.session",
+  "session_token",
+  "session-token",
+  "session",
+];
+
+function hasAuthCookie(request: NextRequest) {
+  return AUTH_COOKIE_NAMES.some((name) => {
+    const value = request.cookies.get(name)?.value;
+    return Boolean(value);
+  });
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -14,15 +29,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const session = await getSessionFromRequest(request);
+  const isAuthed = hasAuthCookie(request);
 
-  if (isProtectedPath && !session) {
+  if (isProtectedPath && !isAuthed) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (isAuthPath && session) {
+  if (isAuthPath && isAuthed) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 

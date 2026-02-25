@@ -21,7 +21,7 @@ export default function DashboardPage() {
           Dashboard
         </h1>
         <p className="text-[var(--text-base)] text-[var(--color-neutral-400)] mt-2">
-          Bienvenue sur OutreachAI
+          Welcome to OutreachAI
         </p>
         <Button
           onClick={handleLogout}

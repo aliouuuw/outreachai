@@ -16,13 +16,13 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
-    requireEmailVerification: true,
-    sendResetPasswordEmail: true,
+    requireEmailVerification: false,
+    sendResetPasswordEmail: false,
     resetPasswordTokenExpiresIn: 3600, // 1 hour
   },
   emailVerification: {
-    sendOnSignUp: true,
-    autoSignInAfterVerification: true,
+    sendOnSignUp: false,
+    autoSignInAfterVerification: false,
     expiresIn: 86400, // 24 hours
   },
   session: {
