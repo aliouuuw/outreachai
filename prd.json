@@ -116,7 +116,8 @@
       "title": "Integrate Stripe for subscriptions",
       "priority": 5,
       "type": "non-ui",
-      "status": "pending",
+      "status": "completed",
+      "completed_date": "2026-02-25",
       "description": "Set up Stripe Checkout, webhook handler, and subscription management with plan tiers.",
       "acceptance_criteria": [
         "Stripe Checkout integration for plan upgrades",
@@ -291,9 +292,9 @@
   ],
   "stats": {
     "total_tasks": 12,
-    "completed": 4,
+    "completed": 5,
     "in_progress": 0,
-    "pending": 8,
+    "pending": 7,
     "ui_tasks": 4,
     "non_ui_tasks": 8,
     "total_estimated_hours": 112

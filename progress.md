@@ -46,6 +46,35 @@ Consequences: Future UI components should use the canonical token names directly
 
 **Gate status:** Ready to implement.
 
+### payment-01 — Implementation
+
+**Status:** Complete
+**Time:** ~1.5h
+
+**What was built:**
+Full Stripe subscription integration with checkout session creation, billing portal access, and webhook handler for the full subscription lifecycle.
+
+**Artifacts produced:**
+- `src/lib/stripe.ts` — Stripe client singleton, `createCheckoutSession`, `createBillingPortalSession`, plan→priceId mapping
+- `src/app/api/stripe/checkout/route.ts` — POST endpoint to create Stripe Checkout sessions for pro/agency plans
+- `src/app/api/stripe/portal/route.ts` — POST endpoint to create Stripe Billing Portal sessions
+- `src/app/api/stripe/webhook/route.ts` — Webhook handler for `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_failed`
+
+**Design decisions:**
+- Stripe v20 (`stripe@20.x`) uses `2026-01-28.clover` API version — `current_period_start/end` moved to `SubscriptionItem`, `Invoice.subscription` removed in favor of `invoice.parent.subscription_details.subscription`
+- `upsertSubscription` helper handles both first-time insert and subsequent updates from webhooks — single code path for all subscription state changes
+- Subscription metadata includes `userId` on checkout session and subscription object — enables webhook to map Stripe events back to app users without database lookup by email
+- `mapStripePlanToTier` uses env var comparison — price IDs never hardcoded in logic
+- Webhook raw body parsing: Next.js App Router returns `request.text()` which preserves raw body for Stripe signature verification
+
+**Assumptions made:**
+- Stripe subscription `metadata.userId` is set at checkout and propagated to subsequent subscription events — must be verified with Stripe CLI testing
+- `invoice.parent.subscription_details.subscription` is the correct v20 path for subscription ID on failed invoices (verified against Stripe v20 type definitions)
+
+**UI QA:** N/A (non-UI task)
+
+---
+
 ### auth-01 — Implementation
 
 **Status:** Complete
