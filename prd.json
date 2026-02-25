@@ -97,7 +97,8 @@
       "title": "Implement user authentication (better-auth)",
       "priority": 4,
       "type": "non-ui",
-      "status": "pending",
+      "status": "completed",
+      "completed_date": "2026-02-25",
       "description": "Set up better-auth with email/password login, session management, and middleware to protect routes.",
       "acceptance_criteria": [
         "better-auth configured with email/password (and optional OAuth)",
@@ -290,9 +291,9 @@
   ],
   "stats": {
     "total_tasks": 12,
-    "completed": 3,
+    "completed": 4,
     "in_progress": 0,
-    "pending": 9,
+    "pending": 8,
     "ui_tasks": 4,
     "non_ui_tasks": 8,
     "total_estimated_hours": 112

@@ -46,6 +46,39 @@ Consequences: Future UI components should use the canonical token names directly
 
 **Gate status:** Ready to implement.
 
+### auth-01 — Implementation
+
+**Status:** Complete
+**Time:** ~1.5h
+
+**What was built:**
+Full better-auth integration with email/password login, session management, Next.js middleware route protection, and login/signup pages.
+
+**Artifacts produced:**
+- `src/lib/auth.ts` — better-auth server instance with drizzle adapter, email/password, 30-day sessions
+- `src/lib/auth-client.ts` — browser-side auth client with signIn/signUp/signOut/useSession exports
+- `src/lib/auth-middleware.ts` — `getSessionFromRequest` and `requireSession` helpers for API routes
+- `src/app/api/auth/[...all]/route.ts` — catch-all better-auth Next.js handler
+- `src/middleware.ts` — route protection: `/leads`, `/dashboard`, `/settings` require auth; `/login`, `/signup` redirect if already authenticated
+- `src/app/login/page.tsx` — login form with error state, loading state, callbackUrl redirect
+- `src/app/signup/page.tsx` — signup form with validation, error state, loading state
+- `src/app/dashboard/page.tsx` — stub dashboard (redirected to after login/signup)
+
+**Design decisions:**
+- `drizzleAdapter` wired directly to existing schema — no migration needed, tables already match better-auth column expectations
+- `toNextJsHandler` from `better-auth/next-js` for zero-boilerplate route handler
+- Middleware uses `auth.api.getSession` server-side (not JWT decode) — single source of truth, no stale session risk
+- Login/signup pages use token CSS variables directly — consistent with design system, no Tailwind aliases needed
+- `callbackUrl` query param preserved through login redirect so users land back where they started
+
+**Assumptions made:**
+- better-auth v1 column names match our schema (verified against docs: id, email, name, emailVerified, image for users table)
+- Session cookie is httpOnly and set automatically by better-auth — no manual cookie handling needed
+
+**UI QA:** N/A (minimal stub UI; full auth UI polish is deferred to dashboard-01)
+
+---
+
 ### infra-01 — Implementation
 
 **Status:** Complete
