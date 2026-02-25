@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSessionFromRequest } from "@/lib/auth-middleware";
 
 const PROTECTED_PATHS = ["/leads", "/dashboard", "/settings"];
-const AUTH_PATHS = ["/login", "/signup"];
+const AUTH_PATHS = ["/login", "/signup", "/forgot-password", "/reset-password"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

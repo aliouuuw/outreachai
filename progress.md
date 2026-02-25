@@ -200,3 +200,38 @@ Docker Compose config for local PostgreSQL, Drizzle ORM schema for all four core
   - `notifications.ts`: success/error notifications
 - Adjusted neutral color scale in tokens to match existing dark theme palette.
 - Verified with `bun run type-check` (passes).
+
+---
+
+### auth-02 — Implementation
+
+**Status:** Complete
+**Time:** ~1h
+
+**What was built:**
+Email verification, password reset, and logout UX flows. Users can now verify their email after signup, reset forgotten passwords, and log out from authenticated pages.
+
+**Artifacts produced:**
+- `src/lib/auth.ts` — updated with `requireEmailVerification: true`, `sendResetPasswordEmail: true`, `emailVerification` config, `resetPasswordTokenExpiresIn: 3600`
+- `src/app/forgot-password/page.tsx` — form to request password reset email; calls `/api/auth/forgot-password` endpoint; shows success state with email confirmation message
+- `src/app/reset-password/page.tsx` — form to set new password with token validation; calls `/api/auth/reset-password` endpoint; includes password confirmation and minimum length validation (8 chars)
+- `src/app/login/page.tsx` — updated with "Mot de passe oublié ?" link to forgot-password page
+- `src/app/dashboard/page.tsx` — updated with logout button that calls `signOut()` and redirects to login
+- `src/middleware.ts` — added `/forgot-password` and `/reset-password` to `AUTH_PATHS` so they're accessible without authentication
+- `src/copy/labels.ts` — added `auth` section with login, logout, signup, forgotPassword, resetPassword, sendResetLink, email, password, confirmPassword labels
+
+**Design decisions:**
+- better-auth's built-in email verification and password reset flows are used via `/api/auth/forgot-password` and `/api/auth/reset-password` endpoints (no custom implementation needed)
+- Forgot-password page shows success state with email confirmation message to prevent email enumeration attacks
+- Reset-password page validates token presence and password requirements client-side before submission
+- Logout button placed in dashboard (stub page) — will be moved to persistent app shell (auth-02 dependency for app-shell-01)
+- All auth pages use token CSS variables for consistent styling with design system
+
+**Assumptions made:**
+- better-auth's email sending is configured via environment variables (SMTP or third-party service) — not implemented here, assumed to be set up separately
+- Token validation happens server-side in better-auth's `/api/auth/reset-password` endpoint
+- Email verification link is sent automatically on signup per `emailVerification.sendOnSignUp: true` config
+
+**UI QA:** Pass — all states implemented (form, loading, error, success); responsive design; accessible form inputs and buttons
+
+**Type-check:** Pass (`tsc --noEmit` returns exit code 0)

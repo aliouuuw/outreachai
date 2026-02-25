@@ -1,22 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { signIn } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { errors } from "@/copy/errors";
 
-export default function LoginPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
-
+export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -24,24 +19,67 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const result = await signIn.email({
-        email,
-        password,
-        callbackURL: callbackUrl,
+      const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          redirectTo: "/reset-password",
+        }),
       });
 
-      if (result.error) {
-        setError(result.error.message ?? errors.unauthorized);
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.message ?? errors.generic);
         return;
       }
 
-      router.push(callbackUrl);
-      router.refresh();
+      setIsSuccess(true);
     } catch {
       setError(errors.generic);
     } finally {
       setIsLoading(false);
     }
+  }
+
+  if (isSuccess) {
+    return (
+      <div className="min-h-screen bg-[var(--color-surface)] flex items-center justify-center px-4">
+        <div className="w-full max-w-md">
+          <div className="bg-[var(--color-surface-raised)] border border-[var(--color-border)] rounded-[var(--radius-xl)] p-8 shadow-[var(--shadow-lg)] text-center">
+            <div className="mb-4 text-[var(--color-success)]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="mx-auto"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <h1 className="text-[var(--text-h3)] font-semibold text-[var(--color-neutral-50)] mb-2">
+              Email envoyé
+            </h1>
+            <p className="text-[var(--text-base)] text-[var(--color-neutral-400)] mb-6">
+              Si un compte existe avec {email}, vous recevrez un lien pour réinitialiser votre mot de passe.
+            </p>
+            <Link
+              href="/login"
+              className="inline-block text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] font-medium transition-colors duration-150"
+            >
+              Retour à la connexion
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -52,10 +90,10 @@ export default function LoginPage() {
             OutreachAI
           </Link>
           <h1 className="text-[var(--text-h3)] font-semibold text-[var(--color-neutral-50)] mt-4">
-            Bon retour
+            Mot de passe oublié ?
           </h1>
           <p className="text-[var(--text-sm)] text-[var(--color-neutral-400)] mt-1">
-            Connectez-vous à votre compte
+            Entrez votre email pour recevoir un lien de réinitialisation
           </p>
         </div>
 
@@ -82,48 +120,24 @@ export default function LoginPage() {
               disabled={isLoading}
             />
 
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="text-[var(--text-sm)] font-medium text-[var(--color-neutral-300)]">
-                  Mot de passe
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-[var(--text-sm)] text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] font-medium transition-colors duration-150"
-                >
-                  Mot de passe oublié ?
-                </Link>
-              </div>
-              <Input
-                id="password"
-                type="password"
-                autoComplete="current-password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={isLoading}
-              />
-            </div>
-
             <Button
               type="submit"
               variant="primary"
               size="lg"
-              disabled={isLoading || !email || !password}
+              disabled={isLoading || !email}
               className="w-full mt-2"
             >
-              {isLoading ? "Connexion…" : "Se connecter"}
+              {isLoading ? "Envoi…" : "Envoyer le lien"}
             </Button>
           </form>
 
           <p className="mt-6 text-center text-[var(--text-sm)] text-[var(--color-neutral-400)]">
-            Pas encore de compte ?{" "}
+            Vous vous souvenez de votre mot de passe ?{" "}
             <Link
-              href="/signup"
+              href="/login"
               className="text-[var(--color-primary)] hover:text-[var(--color-primary-hover)] font-medium transition-colors duration-150"
             >
-              Créer un compte
+              Se connecter
             </Link>
           </p>
         </div>
