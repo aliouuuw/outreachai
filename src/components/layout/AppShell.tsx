@@ -31,8 +31,11 @@ export function AppShell({ children }: AppShellProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
-    // No custom cursor logic needed
-  }, []);
+    // Redirect to login if not authenticated
+    if (!isPending && !session && !error) {
+      router.push('/login');
+    }
+  }, [isPending, session, error, router]);
 
   async function handleLogout() {
     await signOut();
@@ -43,21 +46,21 @@ export function AppShell({ children }: AppShellProps) {
   const user = session?.user ?? null;
   const tier: SubscriptionTier = "starter";
 
-  if (error && !isPending && !session) {
+  if (isPending) {
+    // Show loading state while checking session
     return (
-      <div className="min-h-screen bg-[var(--color-surface)] flex items-center justify-center p-[var(--space-6)]">
-        <ErrorState
-          title={labels.shell.sessionError}
-          description={labels.shell.sessionErrorDescription}
-          onRetry={() => window.location.reload()}
-          secondaryAction={{
-            label: labels.auth.logout,
-            onClick: handleLogout,
-            variant: "ghost",
-          }}
-        />
+      <div className="min-h-screen bg-[var(--color-surface)] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--color-primary)]"></div>
       </div>
     );
+  }
+
+  if (!session || error) {
+    // Redirect to login if no session or there's an error
+    if (typeof window !== 'undefined') {
+      router.push('/login');
+    }
+    return null;
   }
 
   return (
