@@ -361,3 +361,29 @@ Major UI overhaul of the Dashboard and Lead Finder pages, plus core component mi
   Consequences: Table is horizontally scrollable on small screens
 
 **Type-check:** Pass (`bunx tsc --noEmit` returns exit code 0)
+
+---
+
+### auth-ui-01 — Implementation
+
+**Status:** Complete
+
+**What was done:**
+Added show/hide password toggles to the Login and Signup forms.
+
+**Files changed:**
+- `src/app/login/page.tsx` — added Eye/EyeOff toggle to reveal/hide password input
+- `src/app/signup/page.tsx` — added Eye/EyeOff toggles for password + confirm password
+
+**Design decisions:**
+- Decision: Implement password visibility as an inline icon button inside the input field
+  Alternatives considered: Separate checkbox toggle below the field
+  Reason: Keeps the form compact and consistent with modern UX patterns
+  Consequences: Input needs right padding to avoid overlapping the toggle button
+
+**Accessibility:**
+- Toggle button uses `type="button"` (prevents form submit)
+- `aria-label` switches between “Show password” and “Hide password”
+- Keyboard focus visible via token-based focus ring
+
+**Type-check:** Pass (`bunx tsc --noEmit` returns exit code 0)
