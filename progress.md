@@ -10,6 +10,9 @@
   - `labels.ts`
   - `empty-states.ts`
   - `notifications.ts`
+- Updated SDLC artifacts:
+  - Expanded `prd.json` into a comprehensive backlog with normalized story contract fields (`epic`, `persona`, `user_story`, `out_of_scope`, `definition_of_done`)
+  - Updated `sdlc-state.md` to reflect current stage progress and next task
 
 ### Decisions
 
