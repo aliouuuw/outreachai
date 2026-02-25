@@ -46,6 +46,35 @@ Consequences: Future UI components should use the canonical token names directly
 
 **Gate status:** Ready to implement.
 
+### quota-01 — Implementation
+
+**Status:** Complete
+**Time:** ~1h
+
+**What was built:**
+Usage quota system with per-period tracking, plan limit enforcement, and usage increment helpers. The existing `/api/leads` route is now fully gated by auth + quotas.
+
+**Artifacts produced:**
+- `src/lib/quota.ts` — `PLAN_LIMITS` constants, `assertWithinPlanLimits`, `incrementUsage`, `getQuotaStatus`, `QuotaExceededError`, `getOrCreateQuota`
+- `src/app/api/quota/route.ts` — GET endpoint returning current usage + limits for authenticated user
+- `src/app/api/leads/route.ts` — updated to require auth, check `lead_search` quota before Apify call, increment `lead_search` + `leads_returned` after successful scrape
+
+**Design decisions:**
+- `PLAN_LIMITS` is a single mapping indexed by `SubscriptionTier × QuotaAction` — one place to update quotas for all plans
+- `getOrCreateQuota` uses the subscription's `currentPeriodStart/End` as the quota window, falling back to the calendar month for starter plan users with no subscription row
+- `assertWithinPlanLimits` and `incrementUsage` are separate operations — assert before calling Apify (fast, cheap), increment after success (atomic update)
+- `QuotaExceededError` is a typed error class — allows API routes to differentiate quota failures from generic errors cleanly
+- Quota column mapping uses `satisfies` constraint to catch drift between `QuotaAction` keys and schema column names at compile time
+- French error messages for quota exceeded responses — matches primary UI language
+
+**Assumptions made:**
+- Usage increments are fire-and-forget after a successful API response — occasional increment failures (e.g., DB blip) will result in undercounting, not overcounting; acceptable for this use case
+- Per-period reset is automatic by virtue of `getOrCreateQuota` creating a new row when no row covers the current date
+
+**UI QA:** N/A (non-UI task)
+
+---
+
 ### payment-01 — Implementation
 
 **Status:** Complete

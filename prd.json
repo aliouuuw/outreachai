@@ -135,7 +135,8 @@
       "title": "Implement usage quotas and rate limiting",
       "priority": 6,
       "type": "non-ui",
-      "status": "pending",
+      "status": "completed",
+      "completed_date": "2026-02-25",
       "description": "Create middleware to enforce plan limits on API calls and track usage per billing period.",
       "acceptance_criteria": [
         "Usage quota table tracks leads scraped and emails generated",
@@ -292,9 +293,9 @@
   ],
   "stats": {
     "total_tasks": 12,
-    "completed": 5,
+    "completed": 6,
     "in_progress": 0,
-    "pending": 7,
+    "pending": 6,
     "ui_tasks": 4,
     "non_ui_tasks": 8,
     "total_estimated_hours": 112

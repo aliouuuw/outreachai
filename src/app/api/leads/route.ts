@@ -1,9 +1,16 @@
 import { ApifyClient } from 'apify-client';
 import { NextRequest, NextResponse } from 'next/server';
+import { requireSession } from '@/lib/auth-middleware';
+import { assertWithinPlanLimits, incrementUsage, QuotaExceededError } from '@/lib/quota';
 
 const client = new ApifyClient({ token: process.env.APIFY_TOKEN });
 
 export async function GET(req: NextRequest) {
+  const { session, userId } = await requireSession(req);
+  if (!session || !userId) {
+    return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(req.url);
   const location = searchParams.get('location');
   const industry = searchParams.get('industry');
@@ -24,8 +31,24 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    console.log(`Scraping: "${industry} in ${location}" — filter: ${filter}`);
+    await assertWithinPlanLimits({ userId, action: 'lead_search', units: 1 });
+  } catch (err) {
+    if (err instanceof QuotaExceededError) {
+      return NextResponse.json(
+        {
+          error: 'quota_exceeded',
+          message: `Limite de recherches atteinte (${err.used}/${err.limit}) pour votre plan ${err.tier}.`,
+          used: err.used,
+          limit: err.limit,
+          tier: err.tier,
+        },
+        { status: 403 }
+      );
+    }
+    return NextResponse.json({ error: 'Failed to check quota' }, { status: 500 });
+  }
 
+  try {
     const run = await client.actor('compass/crawler-google-places').call({
       searchStringsArray: [`${industry} in ${location}`],
       maxCrawledPlacesPerSearch: 60,
@@ -61,6 +84,9 @@ export async function GET(req: NextRequest) {
       placeId: b.placeId || null,
     }));
 
+    await incrementUsage({ userId, action: 'lead_search', units: 1 });
+    await incrementUsage({ userId, action: 'leads_returned', units: shaped.length });
+
     return NextResponse.json({
       leads: shaped,
       total: shaped.length,
@@ -71,21 +97,20 @@ export async function GET(req: NextRequest) {
     });
 
   } catch (err: any) {
+    if (err instanceof QuotaExceededError) {
+      return NextResponse.json(
+        {
+          error: 'quota_exceeded',
+          message: `Limite de résultats atteinte pour votre plan ${err.tier}.`,
+          tier: err.tier,
+        },
+        { status: 403 }
+      );
+    }
     console.error('Apify error:', err.message);
     return NextResponse.json(
       { error: 'Scraping failed. Check your Apify token and try again.', detail: err.message },
       { status: 500 }
     );
   }
-}
-
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
 }
