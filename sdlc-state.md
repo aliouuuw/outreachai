@@ -11,7 +11,7 @@
 **Name:** OutreachAI
 **Description:** AI-powered lead generation and outreach automation platform for agency owners
 **Started:** Feb 2025
-**Last updated:** Feb 25, 2025
+**Last updated:** Feb 25, 2026
 
 ---
 
@@ -20,9 +20,9 @@
 | Stage | Status | Completed | Bypassed By | Notes |
 |-------|--------|-----------|-------------|-------|
 | 1. Discovery & Definition | `COMPLETE` | Feb 25, 2025 | — | Vision documented in PROJECT_VISION.md |
-| 2. Requirements & Planning | `COMPLETE` | Feb 25, 2025 | — | prd.json generated with 12 tasks, user stories with acceptance criteria |
-| 3. Design | `PENDING` | — | — | Will run per-task during development |
-| 4. Development | `PENDING` | — | — | Ready to start with foundation-01 |
+| 2. Requirements & Planning | `COMPLETE` | Feb 25, 2026 | — | prd.json expanded into comprehensive backlog (35 tasks) |
+| 3. Design | `IN_PROGRESS` | — | — | Running design gate per UI task during development |
+| 4. Development | `IN_PROGRESS` | — | — | Foundation + infra/auth/payments/quotas implemented; continuing backlog |
 | 5. Testing & QA | `PENDING` | — | — | — |
 | 6. Deployment & Release | `PENDING` | — | — | — |
 | 7. Maintenance & Iteration | `PENDING` | — | — | — |
@@ -72,7 +72,7 @@
 
 **Artifact locations:**
 - PRD: `docs/PROJECT_VISION.md` (Product Pillars, Monetization)
-- User stories: `prd.json` (12 tasks with acceptance criteria)
+- User stories: `prd.json` (expanded backlog; tasks grouped by foundation/infrastructure/lead-finder/AI/quality/deployment)
 - Scope: `docs/PROJECT_VISION.md` (Product Pillars section)
 - Dependencies: `docs/API_INTEGRATIONS.md`
 - Release plan: `docs/TECHNICAL_ROADMAP.md` (Milestones m1-m3)
@@ -84,7 +84,7 @@
 
 ## Stage 3 — Design
 
-**Status:** `PENDING`
+**Status:** `IN_PROGRESS`
 
 **Artifacts:**
 - [ ] User flows documented
@@ -97,7 +97,7 @@
 **Notes:**
 - Design will be executed per-task during Stage 4 using the design gate workflow
 - Each UI task will run through `design-gate.md` before implementation
-- Design system tokens need to be created as foundation task
+- Design system tokens and core UI primitives are implemented; remaining UI work continues to run design gate per task
 
 **Bypass sign-off:** —
 **Bypass reason:** —
@@ -106,7 +106,7 @@
 
 ## Stage 4 — Development
 
-**Status:** `PENDING`
+**Status:** `IN_PROGRESS`
 
 **Artifacts:**
 - [ ] Features implemented per acceptance criteria
@@ -118,12 +118,12 @@
 - [ ] progress.md updated with implementation notes and decisions
 
 **Notes:**
-- Ready to start with `foundation-01` (design tokens)
-- Will use `@ralph-cycle-enhanced` for UI tasks with design gate
-- Will use `@ralph-cycle` for non-UI tasks (API, database, auth)
-- Current implementation: Marketing pages (static), one API route (`/api/leads`)
+- Using `@ralph-cycle-enhanced` for UI tasks with design gate
+- Using `@ralph-cycle` for non-UI tasks (API, database, auth)
+- Implemented (committed): foundation-01, foundation-02, infra-01, auth-01, payment-01, quota-01
+- Current implementation includes: auth routes + middleware, Stripe checkout/portal/webhook, quota system, quota-gated /api/leads
 
-**Next task:** foundation-01 (Bootstrap design system tokens and constants)
+**Next task:** auth-02 (Harden auth: email verification, password reset, logout UX)
 
 **Bypass sign-off:** —
 **Bypass reason:** —

@@ -11,19 +11,25 @@
       "id": "m1",
       "name": "Foundation & MVP",
       "target": "2025-03-15",
-      "description": "Core SaaS functionality with auth, payments, and working lead scraping"
+      "description": "Core SaaS infrastructure: auth, payments, quotas, lead finder, dashboard — working end-to-end for a single user"
     },
     {
       "id": "m2",
-      "name": "AI Features",
+      "name": "AI & Lead Management",
       "target": "2025-04-15",
-      "description": "Real AI email generation and website audit features"
+      "description": "AI email generation, saved leads management, CRM pipeline, user settings, onboarding"
     },
     {
       "id": "m3",
-      "name": "CRM & Sequences",
+      "name": "Sequences & Outreach",
       "target": "2025-05-15",
-      "description": "Lead management, follow-up sequences, and campaign tracking"
+      "description": "Follow-up sequences, website audit, multi-channel scripts, email integration"
+    },
+    {
+      "id": "m4",
+      "name": "Production & Quality",
+      "target": "2025-06-01",
+      "description": "Testing coverage, deployment pipeline, error monitoring, performance, accessibility"
     }
   ],
   "tasks": [
@@ -33,12 +39,24 @@
       "priority": 1,
       "type": "non-ui",
       "status": "completed",
-      "description": "Create the token file with all CSS variables for spacing, color, typography, shadow, radius, and motion. Create the copy constants structure. This must be complete before any UI component is built.",
+      "completed_date": "2026-02-25",
+      "group": "foundation",
+      "epic": "foundation",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want consistent design tokens and copy constants so that the UI looks cohesive and changes are easy to maintain.",
+      "out_of_scope": [
+        "Building feature screens"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Create CSS tokens (spacing/color/type/shadow/radius/motion) and copy constants structure.",
       "acceptance_criteria": [
-        "tokens.css (or equivalent) exists with all spacing, color, type, shadow, radius variables",
-        "All variables follow the naming conventions in design-system.md",
-        "copy/ directory exists with errors.ts, labels.ts, empty-states.ts, notifications.ts stubs",
-        "Design system rules file is reviewed and any project-specific overrides documented"
+        "tokens.css exists with all required variables",
+        "Tokens follow design-system.md naming conventions",
+        "copy/ has errors.ts, labels.ts, empty-states.ts, notifications.ts"
       ],
       "dependencies": [],
       "milestone": "m1",
@@ -50,23 +68,26 @@
       "priority": 2,
       "type": "ui",
       "status": "completed",
-      "description": "Build the four pattern components that every feature will use: EmptyState, ErrorState, LoadingState/Skeleton, ConfirmDialog, Toast/Notification. These must exist before any feature UI is built.",
+      "completed_date": "2026-02-25",
+      "group": "foundation",
+      "epic": "foundation",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want clear loading/error/empty states so that the product always communicates what is happening and what I can do next.",
+      "out_of_scope": [
+        "Building domain feature UI"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed (UI tasks only)",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "EmptyState, ErrorState, LoadingState, ConfirmDialog, Toast.",
       "components_expected": ["EmptyState", "ErrorState", "LoadingState", "ConfirmDialog", "Toast"],
-      "states_required": {
-        "empty": "N/A — these ARE the state components",
-        "loading": "N/A",
-        "error": "N/A",
-        "success": "N/A"
-      },
       "acceptance_criteria": [
-        "EmptyState: accepts title, description, optional CTA, optional icon",
-        "ErrorState: accepts title, description, onRetry, optional errorCode",
-        "LoadingState: accepts shape prop for skeleton matching",
-        "ConfirmDialog: accepts title, description, confirmLabel, cancelLabel, onConfirm, variant",
-        "Toast: accepts message, variant (success|error|warning|info), duration, optional action",
-        "All components fully accessible",
-        "All components use design system tokens exclusively",
-        "All components documented with purpose, variants, props, usage"
+        "All components accessible",
+        "All components use design tokens exclusively",
+        "All components cover required states"
       ],
       "design_gate_required": true,
       "dependencies": ["foundation-01"],
@@ -80,13 +101,23 @@
       "type": "non-ui",
       "status": "completed",
       "completed_date": "2026-02-25",
-      "description": "Create Docker Compose for local Postgres, initialize Drizzle schema, set up .env.example, and configure development scripts.",
+      "group": "infrastructure",
+      "epic": "infrastructure",
+      "persona": "Developer",
+      "user_story": "As a developer, I want a local database and schema tooling so that I can build and test features reliably.",
+      "out_of_scope": [
+        "Production deployment"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Local Postgres via Docker Compose, Drizzle schema/migrations, db scripts, .env.example.",
       "acceptance_criteria": [
-        "docker-compose.yml with PostgreSQL service",
-        ".env.example with all required variables documented",
-        "Drizzle schema files created for users, subscriptions, usage_quotas, saved_leads",
-        "Migration scripts ready to run",
-        "bun run db:setup and bun run db:migrate work locally"
+        "docker-compose.yml includes PostgreSQL 16 + healthcheck",
+        "Drizzle schema and initial migration checked in",
+        "bun run db:migrate works locally"
       ],
       "dependencies": [],
       "milestone": "m1",
@@ -94,18 +125,30 @@
     },
     {
       "id": "auth-01",
-      "title": "Implement user authentication (better-auth)",
+      "title": "Implement user authentication (better-auth) — baseline",
       "priority": 4,
       "type": "non-ui",
       "status": "completed",
       "completed_date": "2026-02-25",
-      "description": "Set up better-auth with email/password login, session management, and middleware to protect routes.",
+      "group": "infrastructure",
+      "epic": "authentication",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to sign up and log in securely so that my data and usage limits are private to my account.",
+      "out_of_scope": [
+        "Email verification and password reset (handled in auth-02)",
+        "OAuth providers"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Error paths handled",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Email/password auth, sessions, route protection middleware, login/signup UI.",
       "acceptance_criteria": [
-        "better-auth configured with email/password (and optional OAuth)",
-        "Signup and login pages working",
-        "Session middleware protects /api routes and /leads page",
-        "User data stored in database",
-        "Logout functionality working"
+        "Login + signup pages working",
+        "Middleware protects authenticated routes",
+        "Session available in API routes via helper"
       ],
       "dependencies": ["infra-01"],
       "milestone": "m1",
@@ -113,18 +156,29 @@
     },
     {
       "id": "payment-01",
-      "title": "Integrate Stripe for subscriptions",
+      "title": "Integrate Stripe subscriptions — server",
       "priority": 5,
       "type": "non-ui",
       "status": "completed",
       "completed_date": "2026-02-25",
-      "description": "Set up Stripe Checkout, webhook handler, and subscription management with plan tiers.",
+      "group": "infrastructure",
+      "epic": "billing",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to upgrade and manage my subscription so that my plan and limits reflect what I pay for.",
+      "out_of_scope": [
+        "Pricing page UI (handled in payment-ui-01)"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Error paths handled",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Stripe checkout, portal, and webhook-based subscription sync to DB.",
       "acceptance_criteria": [
-        "Stripe Checkout integration for plan upgrades",
-        "Webhook handler for subscription events",
-        "User plan status stored in database",
-        "Billing portal access for plan changes",
-        "Test mode working with Stripe CLI"
+        "Checkout session endpoint",
+        "Billing portal endpoint",
+        "Webhook validates signature and updates subscription row"
       ],
       "dependencies": ["auth-01"],
       "milestone": "m1",
@@ -132,36 +186,156 @@
     },
     {
       "id": "quota-01",
-      "title": "Implement usage quotas and rate limiting",
+      "title": "Implement usage quotas and rate limiting — server",
       "priority": 6,
       "type": "non-ui",
       "status": "completed",
       "completed_date": "2026-02-25",
-      "description": "Create middleware to enforce plan limits on API calls and track usage per billing period.",
+      "group": "infrastructure",
+      "epic": "quotas",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want clear usage limits so that I can understand what I can do on my plan and avoid unexpected blocks.",
+      "out_of_scope": [
+        "UI for displaying usage (handled in dashboard/leads UI tasks)"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Error paths handled",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Quota window per billing period, plan limits, enforcement helpers, and /api/quota.",
       "acceptance_criteria": [
-        "Usage quota table tracks leads scraped and emails generated",
-        "Middleware checks quota before allowing API calls",
-        "Quota resets on billing period renewal",
-        "API returns 403 when quota exceeded",
-        "Usage stats displayed to user"
+        "/api/leads gated by quota",
+        "/api/quota returns usage + limits",
+        "403 quota_exceeded responses structured"
       ],
       "dependencies": ["payment-01"],
       "milestone": "m1",
       "estimated_hours": 8
     },
     {
-      "id": "leads-api-01",
-      "title": "Refactor lead scraping API with auth and quotas",
+      "id": "auth-02",
+      "title": "Harden auth: email verification, password reset, logout UX",
       "priority": 7,
       "type": "non-ui",
       "status": "pending",
-      "description": "Update existing /api/leads route to require authentication, check quotas, and save leads to database.",
+      "group": "infrastructure",
+      "epic": "authentication",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to verify my email and reset my password so that I can securely regain access to my account.",
+      "out_of_scope": [
+        "OAuth providers"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Error paths handled",
+        "Type-check passes (tsc --noEmit)",
+        "Tests added/updated and passing (where applicable)",
+        "progress.md updated"
+      ],
+      "description": "Add missing auth flows and UI wiring needed for real-world SaaS.",
       "acceptance_criteria": [
-        "API requires authenticated user",
-        "Quota check before scraping (deduct from user limit)",
-        "Leads saved to database with user_id",
-        "Error handling for quota exceeded",
-        "Response includes usage remaining"
+        "Email verification flow",
+        "Forgot password / reset password flow",
+        "Logout action present in authenticated UI"
+      ],
+      "dependencies": ["auth-01"],
+      "milestone": "m1",
+      "estimated_hours": 8
+    },
+    {
+      "id": "payment-ui-01",
+      "title": "Pricing + Billing UI (upgrade, manage subscription)",
+      "priority": 8,
+      "type": "ui",
+      "status": "pending",
+      "group": "billing",
+      "epic": "billing",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to compare plans and upgrade from the product so that I can unlock higher limits without contacting support.",
+      "out_of_scope": [
+        "Full marketing site redesign"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed (UI tasks only)",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Pricing page, plan comparison, upgrade buttons, billing portal link.",
+      "acceptance_criteria": [
+        "Pricing page shows tiers Starter/Pro/Agency",
+        "Upgrade calls /api/stripe/checkout",
+        "Manage billing calls /api/stripe/portal"
+      ],
+      "design_gate_required": true,
+      "dependencies": ["payment-01", "app-shell-01"],
+      "milestone": "m1",
+      "estimated_hours": 10
+    },
+    {
+      "id": "app-shell-01",
+      "title": "Authenticated app shell (layout + navigation)",
+      "priority": 9,
+      "type": "ui",
+      "status": "pending",
+      "group": "app-shell",
+      "epic": "app-shell",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want a clear navigation shell so that I can move between lead finding, saved leads, settings, and billing without getting lost.",
+      "out_of_scope": [
+        "Advanced role-based access control"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed (UI tasks only)",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Persistent authenticated layout: sidebar/nav, user menu, logout, plan badge.",
+      "components_expected": ["AppShell", "Sidebar", "UserMenu", "PlanBadge"],
+      "states_required": {
+        "empty": "N/A",
+        "loading": "Session loading skeleton in user menu",
+        "error": "Session failure - minimal shell with logout",
+        "success": "Full nav with active route highlight"
+      },
+      "acceptance_criteria": [
+        "Nav links: Dashboard, Lead Finder, Saved Leads, Settings, Billing",
+        "Logout redirects to /login",
+        "Responsive sidebar (mobile hamburger)"
+      ],
+      "design_gate_required": true,
+      "dependencies": ["foundation-02", "auth-01"],
+      "milestone": "m1",
+      "estimated_hours": 10
+    },
+    {
+      "id": "leads-api-01",
+      "title": "Leads persistence API (save + list + delete)",
+      "priority": 10,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "lead-finder",
+      "epic": "lead-finder",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to save leads so that I can come back later to contact them and generate outreach.",
+      "out_of_scope": [
+        "Full CRM pipeline tracking (handled in CRM tasks)"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Error paths handled",
+        "Type-check passes (tsc --noEmit)",
+        "Tests added/updated and passing (where applicable)",
+        "progress.md updated"
+      ],
+      "description": "Add endpoints to save scraped leads to DB and retrieve them per user.",
+      "acceptance_criteria": [
+        "POST save lead(s) to saved_leads with ownership",
+        "GET saved leads with pagination",
+        "DELETE saved lead validates ownership"
       ],
       "dependencies": ["quota-01"],
       "milestone": "m1",
@@ -169,135 +343,655 @@
     },
     {
       "id": "leads-ui-01",
-      "title": "Build authenticated lead finder interface",
-      "priority": 8,
+      "title": "Lead Finder UI (auth-gated)",
+      "priority": 11,
       "type": "ui",
       "status": "pending",
-      "description": "Create new lead finder page with auth gating, usage display, and lead saving functionality.",
-      "components_expected": ["LeadFinder", "LeadTable", "SearchForm", "UsageDisplay", "SaveLeadButton"],
-      "states_required": {
-        "empty": "No searches performed yet - shows search form with usage stats",
-        "loading": "Scraping in progress - skeleton table matching loaded structure",
-        "error": "API error or quota exceeded - error state with retry/upgrade options",
-        "success": "Results displayed with save/export options"
-      },
-      "screen_hierarchy": {
-        "primary_element": "Lead results table",
-        "secondary_elements": ["Search form", "Usage stats"],
-        "supporting_elements": ["Export button", "Save buttons", "Filters"]
-      },
+      "group": "lead-finder",
+      "epic": "lead-finder",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to search for leads and save the best ones so that I can build an outreach list quickly.",
+      "out_of_scope": [
+        "Automated email sending"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed (UI tasks only)",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Search form, results table, usage display, save/export actions.",
       "acceptance_criteria": [
-        "Page requires authentication",
-        "Current usage and plan limits displayed",
-        "Search form with location/industry/filters",
-        "Results table with save/export functionality",
-        "Saved leads persist to database",
-        "Responsive design (mobile/tablet/desktop)",
-        "All states implemented (empty, loading, error, success)"
+        "Shows usage remaining and handles quota exceeded",
+        "Results table with per-row save",
+        "Export CSV"
       ],
       "design_gate_required": true,
-      "dependencies": ["foundation-02", "leads-api-01"],
+      "dependencies": ["app-shell-01", "leads-api-01"],
       "milestone": "m1",
+      "estimated_hours": 14
+    },
+    {
+      "id": "settings-api-01",
+      "title": "User settings API (offer profile + onboarding flag)",
+      "priority": 12,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "settings",
+      "epic": "settings",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to define my offer so that the AI can write outreach that matches what I actually sell.",
+      "out_of_scope": [
+        "Team settings"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Error paths handled",
+        "Type-check passes (tsc --noEmit)",
+        "Tests added/updated and passing (where applicable)",
+        "progress.md updated"
+      ],
+      "description": "Create a settings table and endpoints for offer profile fields and onboarding state.",
+      "acceptance_criteria": [
+        "Create Drizzle schema for user_settings (userId, offerWhat, offerWho, offerDiff, onboardingCompleted)",
+        "GET /api/settings returns current settings for authenticated user",
+        "PUT /api/settings upserts settings (partial updates allowed)",
+        "All endpoints return 401 if unauthenticated"
+      ],
+      "dependencies": ["infra-01", "auth-01"],
+      "milestone": "m2",
+      "estimated_hours": 6
+    },
+    {
+      "id": "onboarding-01",
+      "title": "New user onboarding flow (3 steps)",
+      "priority": 13,
+      "type": "ui",
+      "status": "pending",
+      "group": "onboarding",
+      "epic": "onboarding",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want a guided setup so that I can start generating useful outreach without guessing what to configure.",
+      "out_of_scope": [
+        "Complex onboarding with integrations"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed (UI tasks only)",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "After signup, guide the user through defining their offer. Skippable, and only shown until completed.",
+      "acceptance_criteria": [
+        "3 steps: what you sell, who you help, differentiator",
+        "Each step persists via settings API",
+        "Skip available on each step",
+        "Redirect to /dashboard after completion",
+        "Shown only when onboardingCompleted=false"
+      ],
+      "design_gate_required": true,
+      "dependencies": ["app-shell-01", "settings-api-01"],
+      "milestone": "m2",
+      "estimated_hours": 8
+    },
+    {
+      "id": "dashboard-01",
+      "title": "Dashboard home (usage + recent leads + plan card)",
+      "priority": 14,
+      "type": "ui",
+      "status": "pending",
+      "group": "dashboard",
+      "epic": "dashboard",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want a dashboard so that I can see my usage, plan, and next actions at a glance.",
+      "out_of_scope": [
+        "Advanced analytics"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed (UI tasks only)",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Dashboard with usage cards, recent saved leads, and billing/plan management entry points.",
+      "acceptance_criteria": [
+        "Usage cards show used/limit for searches, leads returned, AI messages",
+        "Recent saved leads widget (last 5) with quick actions",
+        "Plan card with upgrade/manage billing CTA",
+        "Empty state for new users",
+        "Loading + error states implemented"
+      ],
+      "design_gate_required": true,
+      "dependencies": ["app-shell-01", "leads-api-01", "payment-ui-01"],
+      "milestone": "m2",
       "estimated_hours": 12
     },
     {
+      "id": "saved-leads-ui-01",
+      "title": "Saved leads page (list + search + bulk actions)",
+      "priority": 15,
+      "type": "ui",
+      "status": "pending",
+      "group": "crm",
+      "epic": "crm",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to manage my saved leads so that I can track who I plan to contact and take actions quickly.",
+      "out_of_scope": [
+        "Full email sending automation"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed (UI tasks only)",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Saved leads management UI: search, filter, pagination, bulk delete/export, per-row actions.",
+      "acceptance_criteria": [
+        "Table with pagination",
+        "Search and filters",
+        "Bulk actions with ConfirmDialog",
+        "Per-row actions: generate email, open maps, delete",
+        "Empty/loading/error/success states"
+      ],
+      "design_gate_required": true,
+      "dependencies": ["app-shell-01", "leads-api-01"],
+      "milestone": "m2",
+      "estimated_hours": 14
+    },
+    {
       "id": "ai-01",
-      "title": "Integrate OpenAI for email generation",
-      "priority": 9,
+      "title": "OpenAI email generation API (quota-gated)",
+      "priority": 16,
       "type": "non-ui",
       "status": "pending",
-      "description": "Create AI service to generate personalized cold emails based on lead data and user preferences.",
-      "acceptance_criteria": [
-        "OpenAI integration working with API key",
-        "Email generation endpoint accepts lead data and tone",
-        "Generated emails are personalized and professional",
-        "Error handling for API failures",
-        "Usage tracking for AI calls"
+      "group": "ai",
+      "epic": "ai",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want AI-written outreach for a lead so that I can contact more prospects with less manual writing.",
+      "out_of_scope": [
+        "Multi-channel message generation (DM/call scripts)"
       ],
-      "dependencies": ["quota-01"],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Error paths handled",
+        "Type-check passes (tsc --noEmit)",
+        "Tests added/updated and passing (where applicable)",
+        "progress.md updated"
+      ],
+      "description": "Add /api/ai/email endpoint that generates a personalized email using saved lead + user offer settings, enforcing ai_message quotas.",
+      "acceptance_criteria": [
+        "Requires auth",
+        "Reads lead from DB and user offer from settings",
+        "Deducts ai_message quota",
+        "Handles OpenAI failures without deducting quota",
+        "Returns structured errors"
+      ],
+      "dependencies": ["quota-01", "leads-api-01", "settings-api-01"],
       "milestone": "m2",
       "estimated_hours": 8
     },
     {
       "id": "ai-ui-01",
-      "title": "Build AI email generator interface",
-      "priority": 10,
+      "title": "AI email generator UI (tone + preview + copy)",
+      "priority": 17,
       "type": "ui",
       "status": "pending",
-      "description": "Create email generation modal/interface with tone selection, preview, and copy functionality.",
-      "components_expected": ["EmailGenerator", "ToneSelector", "EmailPreview", "CopyButton"],
-      "states_required": {
-        "empty": "Lead selected but no email generated yet",
-        "loading": "AI generating email - skeleton preview",
-        "error": "Generation failed - retry option",
-        "success": "Generated email displayed with copy/export"
-      },
+      "group": "ai",
+      "epic": "ai",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to choose a tone and copy an email so that I can quickly send outreach that matches my style.",
+      "out_of_scope": [
+        "Rich text editor"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed (UI tasks only)",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "UI to generate and preview emails for a saved lead, with tone selection and copy/regenerate actions.",
       "acceptance_criteria": [
-        "Integrates with saved leads from leads-ui-01",
-        "Tone selection (direct, casual, bold)",
-        "Email preview with formatting",
-        "Copy to clipboard functionality",
-        "Regenerate option",
-        "Usage deduction on generation"
+        "Tone selector (direct/casual/bold)",
+        "Preview with loading/error/success states",
+        "Copy subject + copy full email actions",
+        "Quota exceeded shows upgrade CTA"
       ],
       "design_gate_required": true,
-      "dependencies": ["leads-ui-01", "ai-01"],
+      "dependencies": ["saved-leads-ui-01", "ai-01"],
       "milestone": "m2",
       "estimated_hours": 10
     },
     {
-      "id": "dashboard-01",
-      "title": "Build user dashboard",
-      "priority": 11,
+      "id": "testing-01",
+      "title": "Testing framework (unit + E2E) and CI gate",
+      "priority": 18,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "quality",
+      "epic": "quality",
+      "persona": "Developer",
+      "user_story": "As a developer, I want automated tests and CI checks so that regressions are caught before release.",
+      "out_of_scope": [
+        "100% coverage"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Type-check passes (tsc --noEmit)",
+        "CI workflow runs on PR",
+        "progress.md updated"
+      ],
+      "description": "Set up Vitest and Playwright, and add CI workflow to run type-check + tests.",
+      "acceptance_criteria": [
+        "Vitest configured and runs",
+        "Playwright configured and runs",
+        "At least 5 unit tests for core helpers",
+        "At least 2 E2E flows (signup/login, lead search)",
+        "CI runs bun install, tsc --noEmit, unit tests, E2E (optional on PR)"
+      ],
+      "dependencies": ["leads-ui-01"],
+      "milestone": "m4",
+      "estimated_hours": 16
+    },
+    {
+      "id": "settings-ui-01",
+      "title": "Settings UI (account + offer profile + billing entry points)",
+      "priority": 19,
       "type": "ui",
       "status": "pending",
-      "description": "Create dashboard showing usage stats, saved leads, recent activity, and plan management.",
-      "components_expected": ["Dashboard", "UsageCard", "RecentLeads", "PlanCard", "ActivityFeed"],
-      "states_required": {
-        "empty": "New user - welcome state with getting started prompts",
-        "loading": "Dashboard data loading - skeleton cards",
-        "error": "Failed to load dashboard - retry option",
-        "success": "Dashboard populated with user data"
-      },
+      "group": "settings",
+      "epic": "settings",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to update my account and offer settings so that the product stays accurate as my positioning changes.",
+      "out_of_scope": [
+        "Multiple workspaces"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed (UI tasks only)",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Settings page where users can edit their offer profile, see account info, access billing portal, and complete onboarding later.",
       "acceptance_criteria": [
-        "Usage statistics (leads scraped, emails generated, quota remaining)",
-        "Recent saved leads with quick actions",
-        "Plan status and upgrade options",
-        "Activity timeline",
-        "Navigation to other features"
+        "Offer profile editor (what/whom/differentiator) backed by settings API",
+        "Account section shows email + created date (if available)",
+        "Billing section links to pricing/upgrade and billing portal",
+        "Logout action available",
+        "Loading/error states implemented"
       ],
       "design_gate_required": true,
-      "dependencies": ["leads-ui-01"],
+      "dependencies": ["app-shell-01", "settings-api-01", "payment-ui-01"],
       "milestone": "m2",
+      "estimated_hours": 8
+    },
+    {
+      "id": "compliance-01",
+      "title": "Compliance baseline (GDPR + CAN-SPAM) and data deletion",
+      "priority": 20,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "compliance",
+      "epic": "compliance",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want the product to handle data responsibly so that I can use it without legal or reputational risk.",
+      "out_of_scope": [
+        "Full legal review"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Type-check passes (tsc --noEmit)",
+        "Docs updated",
+        "progress.md updated"
+      ],
+      "description": "Minimum compliance baseline for a SaaS handling scraped business contact data.",
+      "acceptance_criteria": [
+        "Privacy policy and terms placeholders added (routes + copy)",
+        "Data deletion endpoint: delete user + related rows (saved_leads, quotas, subscriptions where applicable)",
+        "Document what data is stored and why (docs)",
+        "Cookie/session disclosure included"
+      ],
+      "dependencies": ["auth-01", "infra-01"],
+      "milestone": "m4",
+      "estimated_hours": 6
+    },
+    {
+      "id": "deployment-01",
+      "title": "Deployment & release setup (Vercel + prod DB + env)",
+      "priority": 21,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "deployment",
+      "epic": "deployment",
+      "persona": "Developer",
+      "user_story": "As a developer, I want a reproducible production deployment so that releases are safe and repeatable.",
+      "out_of_scope": [
+        "Multi-region deployments"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Type-check passes (tsc --noEmit)",
+        "Deployment checklist documented",
+        "progress.md updated"
+      ],
+      "description": "Prepare production deployment: hosting, database, env vars, and release checklist.",
+      "acceptance_criteria": [
+        "Vercel project configured",
+        "Production Postgres provisioned and reachable",
+        "Environment variables documented for prod",
+        "Migrations run in prod safely",
+        "Stripe webhooks configured for prod endpoint",
+        "Release checklist + rollback plan documented"
+      ],
+      "dependencies": ["payment-01", "auth-01", "infra-01"],
+      "milestone": "m4",
+      "estimated_hours": 8
+    },
+    {
+      "id": "observability-01",
+      "title": "Observability (error monitoring + structured logs)",
+      "priority": 22,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "quality",
+      "epic": "quality",
+      "persona": "Developer",
+      "user_story": "As a developer, I want error monitoring and structured logs so that I can detect, triage, and fix production issues quickly.",
+      "out_of_scope": [
+        "Full APM and distributed tracing"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Type-check passes (tsc --noEmit)",
+        "Deployment verified on staging/preview",
+        "progress.md updated"
+      ],
+      "description": "Add error monitoring and structured server logs for API routes.",
+      "acceptance_criteria": [
+        "Error monitoring configured (e.g., Sentry) for server + client",
+        "Server logs include requestId/userId where possible",
+        "Webhook errors logged with event id"
+      ],
+      "dependencies": ["deployment-01"],
+      "milestone": "m4",
+      "estimated_hours": 6
+    },
+    {
+      "id": "security-01",
+      "title": "Security hardening (headers, CSRF assumptions, webhook defense)",
+      "priority": 23,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "security",
+      "epic": "security",
+      "persona": "Developer",
+      "user_story": "As a developer, I want baseline security hardening so that the app is resilient against common web attacks and webhook abuse.",
+      "out_of_scope": [
+        "Formal penetration testing"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Type-check passes (tsc --noEmit)",
+        "Security headers verified in deployed environment",
+        "progress.md updated"
+      ],
+      "description": "Baseline web security hardening for Next.js app + payment webhooks.",
+      "acceptance_criteria": [
+        "Security headers set (CSP baseline, X-Content-Type-Options, Referrer-Policy)",
+        "Stripe webhook: idempotency protections in DB updates",
+        "API routes validate input with a schema (Zod)"
+      ],
+      "dependencies": ["payment-01", "auth-01"],
+      "milestone": "m4",
+      "estimated_hours": 8
+    },
+    {
+      "id": "accessibility-01",
+      "title": "Accessibility audit & fixes (keyboard, ARIA, contrast)",
+      "priority": 24,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "quality",
+      "epic": "quality",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want the product to be accessible so that I can use it reliably with keyboard navigation and assistive technologies.",
+      "out_of_scope": [
+        "Full WCAG certification"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed for affected UI",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Run an accessibility audit and fix issues across all authenticated pages.",
+      "acceptance_criteria": [
+        "Keyboard navigation works for all core flows",
+        "Modals/dialogs have correct focus management",
+        "Color contrast verified for primary components",
+        "Forms have labels and error messages accessible"
+      ],
+      "dependencies": ["leads-ui-01", "settings-ui-01", "dashboard-01"],
+      "milestone": "m4",
+      "estimated_hours": 6
+    },
+    {
+      "id": "performance-01",
+      "title": "Performance pass (bundle, caching, Core Web Vitals)",
+      "priority": 25,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "quality",
+      "epic": "quality",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want the app to feel fast so that I can search, save, and generate outreach without waiting.",
+      "out_of_scope": [
+        "Server-side caching layers (Redis)"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Core Web Vitals baseline recorded",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Measure and improve performance for the main product pages.",
+      "acceptance_criteria": [
+        "Route-level code splitting verified",
+        "Avoid client bundles for server-only modules",
+        "Core Web Vitals baseline measured and documented"
+      ],
+      "dependencies": ["deployment-01"],
+      "milestone": "m4",
+      "estimated_hours": 6
+    },
+    {
+      "id": "crm-pipeline-01",
+      "title": "CRM pipeline model (stages + saved lead status)",
+      "priority": 26,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "crm",
+      "epic": "crm",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to track the status of each lead so that I can prioritize follow-ups and avoid losing opportunities.",
+      "out_of_scope": [
+        "Full CRM with deals and revenue tracking"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Error paths handled",
+        "Type-check passes (tsc --noEmit)",
+        "Tests added/updated and passing (where applicable)",
+        "progress.md updated"
+      ],
+      "description": "Add a pipeline stage to saved leads and APIs to update it.",
+      "acceptance_criteria": [
+        "saved_leads schema includes stage enum (not_contacted/contacted/replied/booked/won/lost)",
+        "PATCH /api/leads/saved/:id updates stage with ownership checks",
+        "Stage changes recorded in an activity log table"
+      ],
+      "dependencies": ["leads-api-01"],
+      "milestone": "m3",
+      "estimated_hours": 6
+    },
+    {
+      "id": "crm-pipeline-ui-01",
+      "title": "CRM pipeline UI (kanban stages)",
+      "priority": 27,
+      "type": "ui",
+      "status": "pending",
+      "group": "crm",
+      "epic": "crm",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want a kanban view of my leads so that I can quickly see what stage each lead is in and move them as I progress.",
+      "out_of_scope": [
+        "Multi-user collaboration"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed (UI tasks only)",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Kanban board for saved leads with drag-and-drop stage changes.",
+      "acceptance_criteria": [
+        "Columns for each stage",
+        "Drag-and-drop updates stage via API",
+        "Works on mobile (fallback to select stage)",
+        "Loading/error/success states"
+      ],
+      "design_gate_required": true,
+      "dependencies": ["app-shell-01", "crm-pipeline-01", "saved-leads-ui-01"],
+      "milestone": "m3",
       "estimated_hours": 12
     },
     {
-      "id": "testing-01",
-      "title": "Set up testing framework and write initial tests",
-      "priority": 12,
+      "id": "sequences-01",
+      "title": "Follow-up sequences model + generation API",
+      "priority": 28,
       "type": "non-ui",
       "status": "pending",
-      "description": "Configure Vitest for unit tests, Playwright for E2E tests, and write test coverage for core functionality.",
-      "acceptance_criteria": [
-        "Vitest configuration working",
-        "Unit tests for API routes",
-        "Unit tests for utility functions",
-        "E2E tests for critical user journeys",
-        "CI pipeline running tests",
-        "Minimum 80% code coverage on core features"
+      "group": "sequences",
+      "epic": "sequences",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want a follow-up sequence so that I can re-contact leads without rewriting everything each time.",
+      "out_of_scope": [
+        "Automated scheduled sending"
       ],
-      "dependencies": ["leads-ui-01"],
-      "milestone": "m2",
-      "estimated_hours": 16
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Error paths handled",
+        "Type-check passes (tsc --noEmit)",
+        "Tests added/updated and passing (where applicable)",
+        "progress.md updated"
+      ],
+      "description": "Store and generate 5-step follow-up sequences for a saved lead, quota-gated.",
+      "acceptance_criteria": [
+        "DB schema for sequences and sequence_emails",
+        "POST /api/ai/sequence generates 5 emails for a lead",
+        "Quota accounted for (ai_message units per sequence)",
+        "Sequences retrievable and editable"
+      ],
+      "dependencies": ["ai-01"],
+      "milestone": "m3",
+      "estimated_hours": 10
+    },
+    {
+      "id": "sequences-ui-01",
+      "title": "Sequence builder UI (5 emails + timing)",
+      "priority": 29,
+      "type": "ui",
+      "status": "pending",
+      "group": "sequences",
+      "epic": "sequences",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want to review and edit a sequence before sending so that it matches my voice and offer.",
+      "out_of_scope": [
+        "Automatic deliverability optimization"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "UI QA checklist passed (UI tasks only)",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "UI to generate, review, edit, and export a follow-up sequence.",
+      "acceptance_criteria": [
+        "Generate sequence from a saved lead",
+        "Editable subject/body per step",
+        "Copy/export actions",
+        "Clear state handling (loading/error/quota exceeded)"
+      ],
+      "design_gate_required": true,
+      "dependencies": ["sequences-01", "saved-leads-ui-01"],
+      "milestone": "m3",
+      "estimated_hours": 12
+    },
+    {
+      "id": "website-audit-01",
+      "title": "Website audit MVP (Lighthouse) + outreach summary",
+      "priority": 30,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "audit",
+      "epic": "audit",
+      "persona": "Agency owner",
+      "user_story": "As an agency owner, I want a quick website audit so that my outreach includes concrete, specific observations.",
+      "out_of_scope": [
+        "Full PDF report generation"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Error paths handled",
+        "Type-check passes (tsc --noEmit)",
+        "progress.md updated"
+      ],
+      "description": "Generate a lightweight website audit for a lead website and use it as context for outreach.",
+      "acceptance_criteria": [
+        "Given a URL, produce performance/seo/accessibility summary",
+        "Persist audit results per lead",
+        "Expose audit data to AI prompt for more personalized emails"
+      ],
+      "dependencies": ["ai-01"],
+      "milestone": "m3",
+      "estimated_hours": 10
+    },
+    {
+      "id": "maintenance-01",
+      "title": "Maintenance planning (backups, runbooks, dependency cadence)",
+      "priority": 31,
+      "type": "non-ui",
+      "status": "pending",
+      "group": "maintenance",
+      "epic": "maintenance",
+      "persona": "Developer",
+      "user_story": "As a developer, I want operational runbooks so that incidents and routine maintenance can be handled predictably.",
+      "out_of_scope": [
+        "24/7 on-call rotation"
+      ],
+      "definition_of_done": [
+        "All acceptance criteria met",
+        "Docs updated",
+        "progress.md updated"
+      ],
+      "description": "Document operational runbooks and establish maintenance cadence.",
+      "acceptance_criteria": [
+        "Database backup strategy documented",
+        "Runbook: how to rotate secrets",
+        "Runbook: how to handle Stripe webhook failures",
+        "Dependency update cadence defined"
+      ],
+      "dependencies": ["deployment-01"],
+      "milestone": "m4",
+      "estimated_hours": 6
     }
   ],
   "stats": {
-    "total_tasks": 12,
+    "total_tasks": 35,
     "completed": 6,
     "in_progress": 0,
-    "pending": 6,
-    "ui_tasks": 4,
-    "non_ui_tasks": 8,
-    "total_estimated_hours": 112
+    "pending": 29,
+    "ui_tasks": 12,
+    "non_ui_tasks": 23,
+    "total_estimated_hours": 296
   }
 }
