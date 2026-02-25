@@ -183,7 +183,7 @@ export default function LeadsPage() {
       {/* Navbar -> Header to avoid global nav fixed positioning issues */}
       <header className="flex-none flex items-center justify-between px-8 py-5 border-b border-border bg-bg/80 backdrop-blur-xl z-50 relative">
         <div className="flex items-center gap-6">
-          <Link href="/" className="text-xl tracking-tight bg-gradient-to-r from-accent to-a78bfa bg-clip-text text-transparent font-syne font-bold">
+          <Link href="/" className="text-xl tracking-tight bg-gradient-to-r from-accent to-a78bfa bg-clip-text text-transparent font-syne font-extrabold">
             OutreachAI
           </Link>
           <div className="w-px h-5 bg-border" />
@@ -198,7 +198,7 @@ export default function LeadsPage() {
       <div className="flex-1 flex overflow-hidden relative">
         {/* Command Panel (Sidebar) */}
         <aside className="w-[340px] flex-none border-r border-border bg-bg2 flex flex-col z-20 shadow-[10px_0_30px_rgba(0,0,0,0.2)] h-full">
-          <div className="p-6 flex flex-col gap-6 flex-1 overflow-y-auto">
+          <div className="p-6 pt-8 flex flex-col gap-6 flex-1 overflow-y-auto">
             <div className="space-y-5">
               <Input
                 label="Location Vector"
@@ -225,7 +225,7 @@ export default function LeadsPage() {
                       className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-all ${
                         location === city.value
                           ? "bg-accent/15 text-a78bfa border border-accent/30"
-                          : "bg-bg3 border border-border text-muted2 hover:border-accent/40 hover:text-text"
+                          : "bg-transparent text-muted2 hover:text-text"
                       }`}
                     >
                       {city.label}
@@ -235,23 +235,23 @@ export default function LeadsPage() {
               </div>
             </div>
 
-            <div className="w-full h-px bg-border flex-none" />
+            <div className="w-full h-px bg-border flex-none my-2" />
 
             <div className="flex flex-col gap-3">
               <label className="text-[10px] font-bold uppercase tracking-widest text-muted2">Signal Filters</label>
-              <div className="flex flex-col gap-2">
+              <div className="flex gap-2 bg-bg3 border border-border p-1 rounded-xl">
                 {[
-                  { id: "nowebsite", icon: <Globe size={14} />, label: "No Website" },
-                  { id: "noreviews", icon: <Star size={14} />, label: "No Reviews" },
-                  { id: "lowrating", icon: <TrendingDown size={14} />, label: "Low Rating" },
+                  { id: "nowebsite", icon: <Globe size={12} />, label: "No Website" },
+                  { id: "noreviews", icon: <Star size={12} />, label: "No Reviews" },
+                  { id: "lowrating", icon: <TrendingDown size={12} />, label: "Low Rating" },
                 ].map((f) => (
                   <button
                     key={f.id}
                     onClick={() => setFilter(f.id as FilterType)}
-                    className={`w-full px-4 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2.5 ${
+                    className={`flex-1 py-2 px-2 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${
                       filter === f.id
-                        ? "bg-gradient-to-r from-accent to-a78bfa text-white shadow-[0_0_15px_rgba(99,102,241,0.4)] border border-accent/50"
-                        : "bg-bg3 border border-border text-muted2 hover:border-accent/50 hover:text-text"
+                        ? "bg-gradient-to-r from-accent to-a78bfa text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]"
+                        : "text-muted2 hover:text-text"
                     }`}
                   >
                     <span className={filter === f.id ? "text-white" : "text-accent/70"}>{f.icon}</span> 
@@ -280,11 +280,11 @@ export default function LeadsPage() {
             )}
           </div>
 
-          <div className="flex-none p-6 border-t border-border bg-bg2/95 backdrop-blur-md z-10">
+          <div className="flex-none p-6 pt-0 z-10">
             <button
               onClick={handleSearch}
               disabled={loading}
-              className="w-full py-3.5 bg-gradient-to-br from-accent to-accent2 text-white rounded-xl text-xs font-bold uppercase tracking-widest cursor-pointer transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.25)] flex items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(99,102,241,0.4)] disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none border border-accent/50"
+              className="w-full py-3.5 bg-gradient-to-br from-accent to-accent2 text-white rounded-xl text-xs font-bold uppercase tracking-widest cursor-pointer transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.25)] flex items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(99,102,241,0.4)] disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none"
             >
               {loading ? (
                 <>
@@ -293,7 +293,6 @@ export default function LeadsPage() {
                 </>
               ) : (
                 <>
-                  <Search size={16} />
                   Initiate Scan
                 </>
               )}
@@ -340,12 +339,9 @@ export default function LeadsPage() {
               {/* Empty State */}
               {!hasSearched && (
                 <div className="flex flex-col items-center justify-center h-full text-center max-w-md mx-auto pt-20">
-                  <div className="w-20 h-20 rounded-full bg-bg3 border border-border flex items-center justify-center mb-6 shadow-[0_0_50px_rgba(99,102,241,0.05)]">
-                    <Search className="w-8 h-8 text-muted opacity-50" />
-                  </div>
-                  <h3 className="text-xl font-syne font-bold text-text mb-3 tracking-wide">Awaiting Parameters</h3>
+                  <h3 className="text-2xl font-syne font-extrabold text-text mb-4 tracking-wide">Awaiting Parameters</h3>
                   <p className="text-sm text-muted2 font-light leading-relaxed">
-                    Input a location and industry vector in the command panel to begin scanning for high-probability targets.
+                    Input a location and industry vector in the command panel<br/>to begin scanning for high-probability targets.
                   </p>
                 </div>
               )}
